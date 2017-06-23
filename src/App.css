@@ -1,0 +1,110 @@
+.navbar{
+  position: relative;
+  min-height: 50px;
+  margin-bottom: 20px;
+  border: 1px solid lightgrey;
+  margin: 10px 10px 10px;
+  background-color: #1ABC9C;
+}
+
+.loginForm {
+  border: 3px solid #f1f1f1;
+  width: 324px;
+  height: 459px;
+  margin-left: 453px;
+}
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+
+.container {
+  padding: 16px;
+}
+
+.emailInput , .pswdInput{
+  width: 278px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.loginButton{
+  background-color: #1ABC9C;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+
+}
+.signInButton{
+  background-color: #1ABC9C;
+  color: white;
+  padding: 14px 20px;
+  border: none;
+  margin-top: 21px;
+  cursor: pointer;
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.logo{
+  padding-left: 30px;
+  margin-top: 10px;
+  color: white;
+  display: inline-block;
+}
+
+.userImage{
+  float: right;
+  width: 42px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.navContainer {
+  margin: 0px 10px;
+  float: left;
+  width: 226px;
+  border: 3px solid lightgrey;
+  padding: 10px;
+}
+
+.friendsImage{
+  width: 51px;
+  margin-top: 10px;
+}
+
+.myEmail{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.color-green-text {
+  color: #1ABC9C;
+}
+
+.trip {
+  padding: 5px;
+  border: none;
+  width: 100%;
+  margin-top: 20px;
+  border-bottom: 2px solid #1ABC9C;
+}
+
+.navContainer>div>label {
+  margin-top: 20px;
+}
+
+.searchingAdding {
+  margin-top:20px;
+}
