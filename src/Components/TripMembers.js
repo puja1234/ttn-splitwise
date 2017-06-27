@@ -21,7 +21,13 @@ class TripMembers extends Component{
         })
 
     }
-    addToDb(members){
+    addToDb(){
+        //since firebase does not support array so storing members as object structure
+        /*let member = {};
+        for(let i=0;i<this.state.members.length;i++){
+            member.email = this.state.members[i];
+        }*/
+        // console.log("member as object",member);
         let rootRef = firebase.database().ref().child('trip');
         rootRef.push().set({
             tripName: this.props.trip,

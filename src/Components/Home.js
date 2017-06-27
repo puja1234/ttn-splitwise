@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../App.css';
 import TripMembers from './TripMembers'
 import * as firebase from 'firebase'
+import Expense from './Expense'
 
 class Home extends Component {
     constructor(){
@@ -10,26 +11,34 @@ class Home extends Component {
            newTrip:'',
            memberCount:'',
            trip:'',
-           myTrips:''
+           myTrips:[],
+           tripInfo:'',
+           members:[],
+           viewExpense:false
        }
     }
 
     componentWillMount(){
         let by=this.props.user;
+        let myTripLocal = [];
         let rootRef = firebase.database().ref().child('trip');
-        let memberRef = rootRef.child('members');
-        memberRef.orderByChild("members").equalTo(by).on('value', snap => {
+        rootRef.on('value', snap => {
+           let object1=snap.val();
+            for(let key in object1){
+                let obj=object1[key];
+                console.log("Object is:",obj);
+                if(obj.members.indexOf(by)!=-1){
+                    myTripLocal.push(obj);
+                }
+            }
             this.setState({
-                myTrips:snap.val()
-            },()=>{
-                console.log('*******mytrip',this.state.myTrips);
+                myTrips:myTripLocal
             })
         });
         rootRef.on('child_added', snap => {
             console.log('****child added',snap.val());
         });
     }
-
 
     logOut(){
         firebase.auth().signOut();
@@ -41,12 +50,24 @@ class Home extends Component {
         })
     }
 
-
-
     onChangeCategory(event){
-        this.setState({
-            trip:event.target.value
-        })
+        if(event.target.value === 'Select Trip'){
+            alert("this cannot be a trip")
+        }else {
+            this.setState({
+                trip: event.target.value
+            }, () => {
+                this.state.myTrips.map((item)=>{
+                    if(item.tripName === this.state.trip){
+                        this.setState({
+                          tripInfo:item.tripName,
+                            members:item.members,
+                            viewExpense:true
+                        })
+                    }
+                })
+            })
+        }
     }
 
 
@@ -89,16 +110,17 @@ class Home extends Component {
                     </div>
 
 
-                    <select className="dropdown" onChange={this.onChangeCategory.bind(this)}>
-                        <option value="Activity">Select Trip</option>
-                        <option value="Lost and Found">Lost and Found</option>
+                    <select className="dropdown" onChange={this.onChangeCategory.bind(this)} value={this.state.trip}>
+                        <option value="Select Trip">Select Trip</option>
+                        {this.state.myTrips.map((item)=>(
+                            <option value={item.tripName}>{item.tripName}</option>
+                        ))}
                     </select>
-
-
 
                     <button className="signInButton" onClick={this.logOut.bind(this)}>LogOut</button>
                 </div>
-
+                {this.state.viewExpense ?
+                <Expense tripInfo={this.state.trip} members={this.state.members}/>:''}
             </div>
         );
     }
