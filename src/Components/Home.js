@@ -3,6 +3,7 @@ import '../App.css';
 import TripMembers from './TripMembers'
 import * as firebase from 'firebase'
 import Expense from './Expense'
+import Bill from './Bill'
 
 class Home extends Component {
     constructor(){
@@ -21,14 +22,18 @@ class Home extends Component {
     componentWillMount(){
         let by=this.props.user;
         let myTripLocal = [];
+        this.setState({
+            myTrips:[]
+        });
         let rootRef = firebase.database().ref().child('trip');
         rootRef.on('value', snap => {
            let object1=snap.val();
             for(let key in object1){
                 let obj=object1[key];
                 console.log("Object is:",obj);
-                if(obj.members.indexOf(by)!=-1){
+                if(obj.members.indexOf(by)!==-1){
                     myTripLocal.push(obj);
+                    console.log("!!!!!!!!!",obj)
                 }
             }
             this.setState({
@@ -72,11 +77,12 @@ class Home extends Component {
 
 
     render() {
+
         return (
             <div>
                 <div className="navContainer">
                     <div>
-                        <center><img className="friendsImage" src={this.props.photo} alt="https://en.opensuse.org/images/0/0b/Icon-user.png"/></center>
+                        <center><img className="friendsImage" src={this.props.photo}  /></center>
                         <div className="myEmail color-green-text"><label>{this.props.user}</label></div>
                     </div>
 
@@ -92,7 +98,7 @@ class Home extends Component {
                                     <div className="modal-body">
                                         <input className="trip"
                                                type="text"
-                                               placeholder="Enter new trip name"
+                                               placeholder="Enter new trip name or any event"
                                                name="newTrip"
                                                onChange={this.onChangeHandler.bind(this)}
                                                value={this.state.newTrip}/>
@@ -120,7 +126,10 @@ class Home extends Component {
                     <button className="signInButton" onClick={this.logOut.bind(this)}>LogOut</button>
                 </div>
                 {this.state.viewExpense ?
-                <Expense tripInfo={this.state.trip} members={this.state.members}/>:''}
+                    <div>
+                        <Expense tripInfo={this.state.trip} members={this.state.members}  user={this.props.user}/>
+                        <Bill tripName={this.state.trip} members={this.state.members} user={this.props.user}/>
+                    </div>:''}
             </div>
         );
     }

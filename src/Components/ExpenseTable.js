@@ -13,7 +13,7 @@ class ExpenseTable extends Component {
 
     componentDidMount(){
         let tripName = this.props.tripName;
-        console.log("inside table component :",tripName)
+        console.log("inside table component :",tripName);
         let rootRef = firebase.database().ref().child('trip');
         rootRef.orderByChild("tripName").equalTo(tripName).on('value', snap => {
             this.setState({
@@ -21,14 +21,16 @@ class ExpenseTable extends Component {
             },()=>{
                 console.log("inside table :",this.state.trans)
                 for(let key in this.state.trans){
-                    if(this.state.trans.hasOwnProperty(key)){
-                        console.log("has property :",this.state.trans[key].transaction);
-                        this.setState({
-                            trans2:this.state.trans[key].transaction
-                        },()=>{
-                            console.log("inside table component :",this.state.trans2)
+                    if(this.state.trans.hasOwnProperty(key)) {
+                        if (this.state.trans[key].members.indexOf(this.props.user) !== -1) {
+                            console.log("has property :", this.state.trans[key].transaction);
+                            this.setState({
+                                trans2: this.state.trans[key].transaction
+                            }, () => {
+                                console.log("inside table component :", this.state.trans2)
 
-                        })
+                            })
+                        }
                     }
                 }
             });
@@ -52,14 +54,16 @@ class ExpenseTable extends Component {
             },()=>{
                 console.log("inside table :",this.state.trans)
                 for(let key in this.state.trans){
-                    if(this.state.trans.hasOwnProperty(key)){
-                        console.log("has property :",this.state.trans[key].transaction);
-                        this.setState({
-                            trans2:this.state.trans[key].transaction
-                        },()=>{
-                            console.log("inside table component :",this.state.trans2)
+                    if(this.state.trans.hasOwnProperty(key)) {
+                        if (this.state.trans[key].members.indexOf(this.props.user) !== -1) {
+                            console.log("has property :", this.state.trans[key].transaction);
+                            this.setState({
+                                trans2: this.state.trans[key].transaction
+                            }, () => {
+                                console.log("inside table component :", this.state.trans2)
 
-                        })
+                            })
+                        }
                     }
                 }
             });
@@ -74,7 +78,7 @@ class ExpenseTable extends Component {
 
 
     render() {
-        console.log('=======================',this.props.tripName)
+        console.log('=======================',this.props.tripName);
 
         let expenditures =[];
         let index=0;

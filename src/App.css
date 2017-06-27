@@ -148,7 +148,7 @@ th {
 
 .totalExpense{
   float: left;
-  width: 217px;
+  width: 195px;
   height: 455px;
 
   border: 3px solid lightgrey;
@@ -158,4 +158,23 @@ th {
 .myExpenses{
   border: 3px solid lightgray;
   padding-left: 59px;
+}
+
+.billGenerator {
+  border: solid black;
+  width: 75%;
+  margin: 0 auto;
+}
+
+.modal-body>label {
+  float: left;
+}
+
+.input-box{
+  float: right;
+  display: inline-block;
+}
+
+.margin-from-top {
+  margin-top: 15px;
 }
