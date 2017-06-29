@@ -30,7 +30,7 @@ class Home extends Component {
            let object1=snap.val();
             for(let key in object1){
                 let obj=object1[key];
-                console.log("Object is:",obj);
+                console.log("Object is in home:",obj.members);
                 if(obj.members.indexOf(by)!==-1){
                     myTripLocal.push(obj);
                     console.log("!!!!!!!!!",obj)

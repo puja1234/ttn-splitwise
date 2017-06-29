@@ -24,12 +24,22 @@ class TripMembers extends Component{
     addToDb(){
         //since firebase does not support array so storing members as object structure
         let rootRef = firebase.database().ref().child('trip');
-        rootRef.push().set({
+        let billRef = firebase.database().ref().child('bill');
+
+        var myRef = rootRef.push();
+        var key = myRef.key;
+
+        myRef.set({
             tripName: this.props.trip,
             members:this.state.members,
             createdAt :Date.now(),
             createdBy :this.props.user,
             transactions:[]
+        });
+
+        billRef.push().set({
+            id:key,
+            bills:[]
         });
 
         this.setState({

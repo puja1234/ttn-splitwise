@@ -39,6 +39,7 @@ class Expense extends Component {
                 generatedBill : false
             };
             rootRef.orderByChild("tripName").equalTo(trip).on('child_added', function (snap) {
+                console.log("^^^^^^^^^^^^^^^^^",transactioObject)
                 if (snap.val().hasOwnProperty('transaction')) {
                     if(snap.val().members.indexOf(user)!==-1) {
                         console.log("transaction is there*************", snap.val().members.indexOf(user));
@@ -72,6 +73,7 @@ class Expense extends Component {
         return (
             <div className="home">
                 <div className="billGenerator">
+                    <span>{this.props.tripInfo}</span>
                     <h4 className="modal-title register-tag">Bill Generator</h4>
                         <div className="margin-from-top">
                             <label>Person's email:</label>
