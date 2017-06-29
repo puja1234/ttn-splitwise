@@ -136,6 +136,19 @@ class GeneratedBill extends Component {
 
         rootRef.orderByChild('id').equalTo(this.state.tripID).on('child_added', fetchBill);
         rootRef.orderByChild('id').equalTo(this.state.tripID).off('child_added', fetchBill)
+
+        let prevDebitor = this.state.debitor;
+        for(var j = 0; j < prevDebitor.length; j++) {
+            var obj = prevDebitor[j];
+
+            if(obj.creditor === item.creditor && obj.debitor === item.debitor && obj.amount === item.amount) {
+                prevDebitor.splice(j, 1);
+                j--;
+            }
+        }
+        this.setState({
+            debitor : prevDebitor
+        })
     }
 
     clearAmount(item){
@@ -159,8 +172,7 @@ class GeneratedBill extends Component {
                 rootRef.child(parentKey).child('bills').child(childKey).child('accounts').on("child_added", updateStatus)
                 rootRef.child(parentKey).child('bills').child(childKey).child('accounts').off("child_added", updateStatus)
             }
-        }
-
+        };
 
         var deleteBill2 = function (snap) {
             console.log("each bill :",snap.val());
@@ -178,6 +190,19 @@ class GeneratedBill extends Component {
 
         rootRef.orderByChild('id').equalTo(this.state.tripID).on('child_added', deleteBill);
         rootRef.orderByChild('id').equalTo(this.state.tripID).off('child_added', deleteBill)
+
+        let prevCreditor = this.state.creditor;
+        for(var j = 0; j < prevCreditor.length; j++) {
+            var obj = prevCreditor[j];
+
+            if(obj.creditor === item.creditor && obj.debitor === item.debitor && obj.amount === item.amount) {
+                prevCreditor.splice(j, 1);
+                j--;
+            }
+        }
+        this.setState({
+            creditor : prevCreditor
+        })
     }
 
     render() {
