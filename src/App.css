@@ -112,7 +112,7 @@ img.avatar {
 .home{
   float: left;
   width: 796px;
-  height: 455px;
+  height: 522px;
   border: 3px solid lightgrey;
 }
 
@@ -149,7 +149,7 @@ th {
 .totalExpense{
   float: left;
   width: 195px;
-  height: 455px;
+  height: 522px;
 
   border: 3px solid lightgrey;
   margin-left: 10px;
@@ -177,4 +177,8 @@ th {
 
 .margin-from-top {
   margin-top: 15px;
+}
+
+.trip-title{
+  margin-left: 250px;
 }

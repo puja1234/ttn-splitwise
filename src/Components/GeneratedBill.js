@@ -15,30 +15,30 @@ class GeneratedBill extends Component {
     componentWillMount(){
         let tripName = this.props.tripName;
         let usersDebit =[] , userdCredit =[]
-        console.log("``````trip name is :",tripName);
+        // console.log("``````trip name is :",tripName);
         let rootRef = firebase.database().ref().child('trip');
         rootRef.orderByChild("tripName").equalTo(tripName).on('child_added', snap => {
-            console.log("~~~~~~~~",snap)
+            // console.log("~~~~~~~~",snap)
             if(snap.val().members.indexOf(this.props.user) !== -1){
-                console.log("my trip is~~~~~~~~~",snap.val(),"__________",snap.key);
+                // console.log("my trip is~~~~~~~~~",snap.val(),"__________",snap.key);
                 this.setState({
                     tripID:snap.key
                 },()=>{
-                    console.log("~trip id is :",this.state.tripID)
+                    // console.log("~trip id is :",this.state.tripID)
                 })
                 // search bill table with this trip id
 
                 let billRef  = firebase.database().ref().child('bill');
                 billRef.orderByChild('id').equalTo(this.state.tripID).on('child_added',billSnap =>{
-                    console.log("~~~~~~~bills are" , billSnap.val())
+                    // console.log("~~~~~~~bills are" , billSnap.val())
                     for(let key in billSnap.val().bills){
                         for( let i =0; i< billSnap.val().bills[key].accounts.length;i++){
                             if(billSnap.val().bills[key].accounts[i].debitor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending'){
                                 usersDebit.push(billSnap.val().bills[key].accounts[i]);
-                                console.log("~~~~~accounts",billSnap.val().bills[key].accounts[i]);
+                                // console.log("~~~~~accounts",billSnap.val().bills[key].accounts[i]);
                             }else if(billSnap.val().bills[key].accounts[i].creditor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending'){
                                 userdCredit.push(billSnap.val().bills[key].accounts[i]);
-                                console.log("~~~~~accounts",billSnap.val().bills[key].accounts[i]);
+                                // console.log("~~~~~accounts",billSnap.val().bills[key].accounts[i]);
                             }
                         }
 
@@ -47,7 +47,7 @@ class GeneratedBill extends Component {
                         debitor:usersDebit,
                         creditor:userdCredit
                     },()=>{
-                        console.log("**********",this.state.debitor,this.state.creditor)
+                        // console.log("**********",this.state.debitor,this.state.creditor)
                     })
                 })
             }
@@ -60,28 +60,28 @@ class GeneratedBill extends Component {
         let usersDebit =[] , userdCredit =[];
         let rootRef = firebase.database().ref().child('trip');
         rootRef.orderByChild("tripName").equalTo(tripName).on('child_added', snap => {
-            console.log("~~~~~~~~",snap)
+            // console.log("~~~~~~~~",snap)
             if(snap.val().members.indexOf(this.props.user) !== -1){ // run single time
-                console.log("my trip is~~~~~~~~~~~~~",snap.val(),"__________",snap.key);
+                // console.log("my trip is~~~~~~~~~~~~~",snap.val(),"__________",snap.key);
                 this.setState({
                     tripID:snap.key
                 },()=>{
-                    console.log("~trip id is :",this.state.tripID)
+                    // console.log("~trip id is :",this.state.tripID)
                 });
 
                 // search bill table with this trip id
 
                 let billRef  = firebase.database().ref().child('bill');
                 billRef.orderByChild('id').equalTo(this.state.tripID).on('child_added',billSnap =>{
-                    console.log("~~~~~~~bills are" , billSnap.val());
+                    // console.log("~~~~~~~bills are" , billSnap.val());
                     for(let key in billSnap.val().bills){
                         for( let i =0; i< billSnap.val().bills[key].accounts.length;i++){
                             if(billSnap.val().bills[key].accounts[i].debitor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending'){
                                 usersDebit.push(billSnap.val().bills[key].accounts[i]);
-                                console.log("~~~~~accounts",billSnap.val().bills[key].accounts[i])
+                                // console.log("~~~~~accounts",billSnap.val().bills[key].accounts[i])
                             }else if(billSnap.val().bills[key].accounts[i].creditor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending'){
                                 userdCredit.push(billSnap.val().bills[key].accounts[i]);
-                                console.log("~~~~~accounts",billSnap.val().bills[key].accounts[i])
+                                // console.log("~~~~~accounts",billSnap.val().bills[key].accounts[i])
                             }
                         }
                     }
@@ -89,7 +89,7 @@ class GeneratedBill extends Component {
                         debitor:usersDebit,
                         creditor:userdCredit
                     },()=>{
-                        console.log("**********",this.state.debitor,this.state.creditor)
+                        // console.log("**********",this.state.debitor,this.state.creditor)
                     })
                 })
             }
@@ -105,14 +105,14 @@ class GeneratedBill extends Component {
 
         var updateStatus = function (snap) {
             if(snap.val().creditor === item.creditor && snap.val().debitor === item.debitor && snap.val().amount === item.amount && snap.val().status === 'pending') {
-                console.log("Finally got ir", snap.val());
+                // console.log("Finally got ir", snap.val());
                let ref = rootRef.child(parentKey).child('bills').child(childKey).child('accounts').child(snap.key)
                 ref.update({status : 'done'})
             }
         };
 
         var fetchAccounts = function (snap) {
-            console.log("accounts are :", snap.val());
+            // console.log("accounts are :", snap.val());
             for (let i = 0; i < snap.val().length; i++) {
                 rootRef.child(parentKey).child('bills').child(childKey).child('accounts').on("child_added", updateStatus)
                 rootRef.child(parentKey).child('bills').child(childKey).child('accounts').off("child_added", updateStatus)
@@ -121,14 +121,14 @@ class GeneratedBill extends Component {
 
 
         var billFetch2 = function (snap) {
-            console.log("each bill :",snap.val());
+            // console.log("each bill :",snap.val());
             childKey = snap.key;
             rootRef.child(parentKey).child('bills').child(childKey).on("child_added",fetchAccounts)
             rootRef.child(parentKey).child('bills').child(childKey).off("child_added",fetchAccounts)
         };
 
         var fetchBill = function (snap) {
-            console.log("pay button clicked :",snap.val().bills);
+            // console.log("pay button clicked :",snap.val().bills);
             parentKey = snap.key;
             rootRef.child(parentKey).child('bills').on('child_added',billFetch2);
             rootRef.child(parentKey).child('bills').off('child_added',billFetch2)
@@ -149,6 +149,8 @@ class GeneratedBill extends Component {
         this.setState({
             debitor : prevDebitor
         })
+
+        alert('You paid Rs.`'+item.amount+' to '+item.creditor);
     }
 
     clearAmount(item){
@@ -160,14 +162,14 @@ class GeneratedBill extends Component {
 
         var updateStatus = function (snap) {
             if(snap.val().creditor === item.creditor && snap.val().debitor === item.debitor && snap.val().amount === item.amount && snap.val().status === 'pending') {
-                console.log("Finally got ir", snap.val());
+                // console.log("Finally got ir", snap.val());
                 let ref = rootRef.child(parentKey).child('bills').child(childKey).child('accounts')
                 ref.child(snap.key).remove();
             }
         };
 
         var deleteBill3 = function (snap) {
-            console.log("accounts are :", snap.val());
+            // console.log("accounts are :", snap.val());
             for (let i = 0; i < snap.val().length; i++) {
                 rootRef.child(parentKey).child('bills').child(childKey).child('accounts').on("child_added", updateStatus)
                 rootRef.child(parentKey).child('bills').child(childKey).child('accounts').off("child_added", updateStatus)
@@ -175,14 +177,14 @@ class GeneratedBill extends Component {
         };
 
         var deleteBill2 = function (snap) {
-            console.log("each bill :",snap.val());
+            // console.log("each bill :",snap.val());
             childKey = snap.key;
             rootRef.child(parentKey).child('bills').child(childKey).on("child_added",deleteBill3)
             rootRef.child(parentKey).child('bills').child(childKey).off("child_added",deleteBill3)
         };
 
         var deleteBill = function (snap) {
-            console.log("pay button clicked :",snap.val().bills);
+            // console.log("pay button clicked :",snap.val().bills);
             parentKey = snap.key;
             rootRef.child(parentKey).child('bills').on('child_added',deleteBill2);
             rootRef.child(parentKey).child('bills').off('child_added',deleteBill2)
@@ -203,6 +205,8 @@ class GeneratedBill extends Component {
         this.setState({
             creditor : prevCreditor
         })
+
+        alert('You cleared Rs.'+item.amount+' of '+item.debitor);
     }
 
     render() {

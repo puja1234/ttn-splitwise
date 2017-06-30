@@ -17,10 +17,11 @@ class TripMembers extends Component{
         this.setState({
             members,
         },()=>{
-            console.log(this.state.members, 'members------')
+            // console.log(this.state.members, 'members------')
         })
 
     }
+
     addToDb(){
         //since firebase does not support array so storing members as object structure
         let rootRef = firebase.database().ref().child('trip');

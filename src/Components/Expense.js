@@ -24,12 +24,12 @@ class Expense extends Component {
         event.preventDefault();
         let user=this.props.user;
         let trip = this.props.tripInfo;
-        console.log("trip on button click is :", trip);
+        // console.log("trip on button click is :", trip);
         let regex = /^[0-9]{1,10}$/;
         if (this.state.spend_by === '' || this.state.amount === '' || this.state.title === '') {
             alert("Fields cannot be empty!!!")
         } else if (regex.test(this.state.amount) === false) {
-            alert("Amount should be a number only")
+            alert("Amount should be a positive number only")
         } else {
             let rootRef = firebase.database().ref().child('trip');
             let transactioObject = {
@@ -39,15 +39,15 @@ class Expense extends Component {
                 generatedBill : false
             };
             rootRef.orderByChild("tripName").equalTo(trip).on('child_added', function (snap) {
-                console.log("^^^^^^^^^^^^^^^^^",transactioObject)
+                // console.log("^^^^^^^^^^^^^^^^^",transactioObject)
                 if (snap.val().hasOwnProperty('transaction')) {
                     if(snap.val().members.indexOf(user)!==-1) {
-                        console.log("transaction is there*************", snap.val().members.indexOf(user));
+                        // console.log("transaction is there*************", snap.val().members.indexOf(user));
                         snap.ref.child('transaction').push({transactioObject});
                     }
                 } else {
                     if(snap.val().members.indexOf(user)!==-1) {
-                        console.log("transaction is not there");
+                        // console.log("transaction is not there");
                         snap.ref.update({transaction: []});
                         snap.ref.child('transaction').push({transactioObject});
                     }
@@ -69,11 +69,12 @@ class Expense extends Component {
     }
 
     render() {
-        console.log('>>>>>>>>>', this.props.tripInfo);
+        // console.log('>>>>>>>>>', this.props.tripInfo);
+        let index =0 ;
         return (
             <div className="home">
                 <div className="billGenerator">
-                    <span>{this.props.tripInfo}</span>
+                    <span className="trip-title">Welcome to Trip {this.props.tripInfo}</span>
                     <h4 className="modal-title register-tag">Bill Generator</h4>
                         <div className="margin-from-top">
                             <label>Person's email:</label>
@@ -81,7 +82,7 @@ class Expense extends Component {
                                     value={this.state.spend_by}>
                                 <option value="Select Trip">Select Person's email</option>
                                 {this.props.members.map((item) => (
-                                    <option value={item}>{item}</option>
+                                    <option key={index++} value={item}>{item}</option>
                                 ))
                                 }
                                 )}

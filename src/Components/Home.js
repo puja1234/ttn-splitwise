@@ -30,10 +30,10 @@ class Home extends Component {
            let object1=snap.val();
             for(let key in object1){
                 let obj=object1[key];
-                console.log("Object is in home:",obj.members);
+                // console.log("Object is in home:",obj.members);
                 if(obj.members.indexOf(by)!==-1){
                     myTripLocal.push(obj);
-                    console.log("!!!!!!!!!",obj)
+                    // console.log("!!!!!!!!!",obj)
                 }
             }
             this.setState({
@@ -41,7 +41,7 @@ class Home extends Component {
             })
         });
         rootRef.on('child_added', snap => {
-            console.log('****child added',snap.val());
+            // console.log('****child added',snap.val());
         });
     }
 
@@ -75,14 +75,13 @@ class Home extends Component {
         }
     }
 
-
     render() {
-
+        let index =0;
         return (
             <div>
                 <div className="navContainer">
                     <div>
-                        <center><img className="friendsImage" src={this.props.photo}  /></center>
+                        <center><img className="friendsImage" src={this.props.photo} alt="User image" /></center>
                         <div className="myEmail color-green-text"><label>{this.props.user}</label></div>
                     </div>
 
@@ -119,7 +118,7 @@ class Home extends Component {
                     <select className="dropdown" onChange={this.onChangeCategory.bind(this)} value={this.state.trip}>
                         <option value="Select Trip">Select Trip</option>
                         {this.state.myTrips.map((item)=>(
-                            <option value={item.tripName}>{item.tripName}</option>
+                            <option key={ index++} value={item.tripName}>{item.tripName}</option>
                         ))}
                     </select>
 
