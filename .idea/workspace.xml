@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="87db312f-f039-48ce-a3dd-b18acad63d9b" name="Default" comment="">
+
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/App.css" afterPath="$PROJECT_DIR$/src/App.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Components/Bill.js" afterPath="$PROJECT_DIR$/src/Components/Bill.js" />
@@ -11,6 +12,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Components/Home.js" afterPath="$PROJECT_DIR$/src/Components/Home.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Components/Login.js" afterPath="$PROJECT_DIR$/src/Components/Login.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Components/TripMembers.js" afterPath="$PROJECT_DIR$/src/Components/TripMembers.js" />
+
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -62,8 +64,13 @@
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="Expense.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Components/Expense.js">
+=======
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/index.js">
+>>>>>>> master
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="217">
               <caret line="70" column="13" lean-forward="false" selection-start-line="70" selection-start-column="13" selection-end-line="70" selection-end-column="13" />
@@ -80,8 +87,13 @@
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="ExpenseTable.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Components/ExpenseTable.js">
+=======
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+>>>>>>> master
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="120">
               <caret line="91" column="23" lean-forward="true" selection-start-line="91" selection-start-column="23" selection-end-line="91" selection-end-column="23" />
@@ -94,6 +106,7 @@
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="GeneratedBill.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Components/GeneratedBill.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -106,6 +119,14 @@
                 <element signature="n#!!block;n#payAmount#0;n#GeneratedBill#0" expanded="false" />
                 <element signature="n#!!block;n#render#0;n#GeneratedBill#0" expanded="false" />
               </folding>
+=======
+      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+>>>>>>> master
             </state>
           </provider>
         </entry>
@@ -204,6 +225,11 @@
         <option value="$PROJECT_DIR$/src/Components/Home.js" />
         <option value="$PROJECT_DIR$/src/Components/Expense.js" />
         <option value="$PROJECT_DIR$/src/Components/ExpenseTable.js" />
+<<<<<<< HEAD
+=======
+        <option value="$PROJECT_DIR$/src/Components/Bill.js" />
+        <option value="$PROJECT_DIR$/README.md" />
+>>>>>>> master
       </list>
     </option>
   </component>
@@ -373,15 +399,23 @@
       <workItem from="1498190928204" duration="21812000" />
       <workItem from="1498380832923" duration="5556000" />
       <workItem from="1498394375896" duration="6231000" />
+<<<<<<< HEAD
       <workItem from="1498539591605" duration="16065000" />
       <workItem from="1498622507003" duration="20830000" />
       <workItem from="1498710207086" duration="16852000" />
       <workItem from="1498794818752" duration="3373000" />
+=======
+      <workItem from="1498539591605" duration="16664000" />
+>>>>>>> master
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="97480000" />
+=======
+    <option name="totallyTimeSpent" value="55366000" />
+>>>>>>> master
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1301" height="744" extended-state="6" />
@@ -980,6 +1014,14 @@
             <element signature="e#1413#1482#0" expanded="false" />
             <element signature="n#!!block;n#componentWillReceiveProps#0;n#ExpenseTable#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
