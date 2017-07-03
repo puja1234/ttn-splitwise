@@ -4,6 +4,8 @@ import TripMembers from './TripMembers'
 import * as firebase from 'firebase'
 import Expense from './Expense'
 import Bill from './Bill'
+import Storage from './Storage'
+
 
 class Home extends Component {
     constructor(){
@@ -15,7 +17,8 @@ class Home extends Component {
            myTrips:[],
            tripInfo:'',
            members:[],
-           viewExpense:false
+           viewExpense:false,
+           myImages:[],
        }
     }
 
@@ -55,7 +58,7 @@ class Home extends Component {
         })
     }
 
-    onChangeCategory(event){
+    /*onChangeCategory(event){
         if(event.target.value === 'Select Trip'){
             alert("this cannot be a trip")
         }else {
@@ -73,6 +76,61 @@ class Home extends Component {
                 })
             })
         }
+    }*/
+
+    onChangeCategory(event){
+        let imageArray = [];
+        if(event.target.value === 'Select Trip'){
+            alert("this cannot be a trip")
+        }else {
+            this.setState({
+                trip: event.target.value
+            }, () => {
+                this.state.myTrips.map((item)=>{
+                    if(item.tripName === this.state.trip){
+                        this.setState({
+                            tripInfo:item.tripName,
+                            members:item.members,
+                            viewExpense:true,
+                        })
+                    }
+                })
+
+                //query for retrieving img files into a select dropdown
+
+                let rootRef = firebase.database().ref().child('trip');
+                rootRef.orderByChild("tripName").equalTo(this.state.trip).on('value', function (snapshot) {
+                    console.log('snapshot.val()',snapshot.val());
+                    if(snapshot.child !== -1) {
+                        snapshot.forEach(function (childSnapshot) {
+                            console.log('$$$$$$$$$$', childSnapshot.val());
+                            if (childSnapshot.val().imageFiles !== -1) {
+                                childSnapshot.ref.child('imageFiles').on('value', function (imageSnap) {
+                                    imageSnap.forEach(function (childImageSnap) {
+                                        let url = childImageSnap.val().imageURL;
+                                        //let imageName = url.replace(/^.*[\\\/]/, ''); //==============to get only name of picture from url.
+                                        console.log('**************************', url);
+                                        imageArray.push(url);
+
+                                    })
+                                })
+                            }
+                            return true;
+                        })
+
+                    }
+
+                });
+
+                this.setState({
+                    myImages: imageArray
+                },function(){
+                    console.log('imageArray',this.state.myImages);
+                })
+
+            })
+        }
+
     }
 
 
@@ -122,6 +180,9 @@ class Home extends Component {
                             <option value={item.tripName}>{item.tripName}</option>
                         ))}
                     </select>
+
+                    <Storage trip={this.state.trip} user={this.props.user} myImages={this.state.myImages}/>
+
 
                     <button className="signInButton" onClick={this.logOut.bind(this)}>LogOut</button>
                 </div>

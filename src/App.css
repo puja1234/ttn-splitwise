@@ -182,3 +182,41 @@ th {
 .trip-title{
   margin-left: 250px;
 }
+
+/*---------------------------------------------------------*/
+
+.navContainer {
+  margin: 0px 10px;
+  float: left;
+  width: 226px;
+  border: 3px solid lightgrey;
+  padding: 10px;
+}
+
+.image-upload-div {
+  margin-top: 10px;
+}
+
+.image-render {
+  margin: 0;
+  padding: 4px;
+  max-height: 200px;
+  overflow: auto;
+}
+
+.image-render>li {
+  list-style-type: none;
+}
+
+.image-urls{
+  width:100%;
+}
+
+.image-link{
+  padding:2px;
+  margin:2px;
+}
+
+.storage-downloads>a{
+  display: block;
+}
