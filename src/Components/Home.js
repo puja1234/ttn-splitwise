@@ -19,6 +19,7 @@ class Home extends Component {
            members:[],
            viewExpense:false,
            myImages:[],
+           displayStorage:false
        };
         this.clearState = this.clearState.bind(this);
     }
@@ -56,6 +57,9 @@ class Home extends Component {
     onChangeHandler(event){
         this.setState({
             [event.target.name]: event.target.value
+        })
+        this.setState({
+            displayStorage:false
         })
     }
 
@@ -124,7 +128,8 @@ class Home extends Component {
                 });
 
                 this.setState({
-                    myImages: imageArray
+                    myImages: imageArray,
+                    displayStorage:true
                 },function(){
                     console.log('imageArray',this.state.myImages);
                 })
@@ -171,13 +176,18 @@ class Home extends Component {
                                                name="trip"
                                                onChange={this.onChangeHandler.bind(this)}
                                                value={this.state.trip}/>
-                                        <input className="trip"
-                                               type="text"
-                                               placeholder="Enter number of members"
-                                               name="memberCount"
-                                               onChange={this.onChangeHandler.bind(this)}
-                                               value={this.state.memberCount}/>
-                                        <TripMembers memberCount={this.state.memberCount} trip={this.state.trip} user={this.props.user} clearState={this.clearState}/>
+                                        { this.state.displayStorage ?
+                                            ' ' :
+                                            <div>
+                                            <input className="trip"
+                                                   type="text"
+                                                   placeholder="Enter number of members"
+                                                   name="memberCount"
+                                                   onChange={this.onChangeHandler.bind(this)}
+                                                   value={this.state.memberCount}/>
+                                            < TripMembers memberCount={this.state.memberCount} trip={this.state.trip} user={this.props.user} clearState={this.clearState}/>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -191,8 +201,12 @@ class Home extends Component {
                             <option value={item.tripName}>{item.tripName}</option>
                         ))}
                     </select>
-
-                    <Storage trip={this.state.trip} user={this.props.user} myImages={this.state.myImages}/>
+                    {
+                        this.state.displayStorage ?
+                            <Storage trip={this.state.trip} user={this.props.user} myImages={this.state.myImages}/>
+                            :
+                            ''
+                    }
 
 
                     <button className="signInButton" onClick={this.logOut.bind(this)}>LogOut</button>
