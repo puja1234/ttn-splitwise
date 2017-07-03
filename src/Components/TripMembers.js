@@ -41,7 +41,7 @@ class TripMembers extends Component{
             id:key,
             bills:[]
         });
-
+        this.props.clearState();
         this.setState({
             members:[]
         });

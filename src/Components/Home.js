@@ -19,7 +19,8 @@ class Home extends Component {
            members:[],
            viewExpense:false,
            myImages:[],
-       }
+       };
+        this.clearState = this.clearState.bind(this);
     }
 
     componentDidMount(){
@@ -133,6 +134,16 @@ class Home extends Component {
 
     }
 
+    clearState(){
+        console.log("`````````````````")
+        this.setState({
+            trip:'',
+            memberCount:''
+        },()=>{
+            console.log("```````````````",this.state.trip,this.state.memberCount)
+        })
+    }
+
 
     render() {
 
@@ -157,16 +168,16 @@ class Home extends Component {
                                         <input className="trip"
                                                type="text"
                                                placeholder="Enter new trip name or any event"
-                                               name="newTrip"
+                                               name="trip"
                                                onChange={this.onChangeHandler.bind(this)}
-                                               value={this.state.newTrip}/>
+                                               value={this.state.trip}/>
                                         <input className="trip"
                                                type="text"
                                                placeholder="Enter number of members"
                                                name="memberCount"
                                                onChange={this.onChangeHandler.bind(this)}
                                                value={this.state.memberCount}/>
-                                        <TripMembers memberCount={this.state.memberCount} trip={this.state.newTrip} user={this.props.user}/>
+                                        <TripMembers memberCount={this.state.memberCount} trip={this.state.trip} user={this.props.user} clearState={this.clearState}/>
                                     </div>
                                 </div>
                             </div>
