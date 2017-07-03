@@ -19,7 +19,7 @@ class Home extends Component {
        }
     }
 
-    componentWillMount(){
+    componentDidMount(){
         let by=this.props.user;
         let myTripLocal = [];
         this.setState({

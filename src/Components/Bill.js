@@ -14,7 +14,7 @@ class Bill extends Component {
         }
     }
 
-    componentWillMount(){
+    componentDidMount(){
         let tripName = this.props.tripName;
 
         let rootRef = firebase.database().ref().child('trip');

@@ -12,7 +12,7 @@ class GeneratedBill extends Component {
             creditor:[]
         }
     }
-    componentWillMount(){
+    componentDidMount(){
         let tripName = this.props.tripName;
         let usersDebit =[] , userdCredit =[]
         console.log("``````trip name is :",tripName);
