@@ -1,9 +1,6 @@
 /**
  * Created by saubhagya on 3/7/17.
  */
-/**
- * Created by saubhagya on 3/7/17.
- */
 import React, { Component } from 'react';
 import '../App.css';
 import TripMembers from './TripMembers'
@@ -27,6 +24,7 @@ class Storage extends Component{
 
     onImageUploaderChange = (event) => {
 
+        let newImgAdded = '';
         if(this.props.trip == ''){
             alert('please select a trip...');
         }
@@ -34,18 +32,18 @@ class Storage extends Component{
             let imgPostedBy=this.props.user;
             let currentTrip = this.props.trip;
 
-            var file = event.target.files[0];
+            let file = event.target.files[0];
 
             //to upload image for a particular trip...
             //if we want store all images together, just remove this,state.trip from the statement below.
 
-            var storageRef = firebase.storage().ref('AppGallery/'+this.props.user+
+            let storageRef = firebase.storage().ref('AppGallery/'+this.props.user+
                 '/'+this.props.trip+
                 '/'+file.name);
-            var task = storageRef.put(file);
-            console.log("task that stores storage ref-----",task);
+            let task = storageRef.put(file);
+            // console.log("task that stores storage ref-----",task);
             task.on('state_changed',(snapshot) => {
-                    var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                     this.setState({
                         imageFile: file,
                         imageUploader: percentage
@@ -54,28 +52,35 @@ class Storage extends Component{
                     console.log('error occuring during state changed',error);
                 },
                 function() {
-                    var downloadURL = task.snapshot.downloadURL;
+                    let downloadURL = task.snapshot.downloadURL;
                     console.log('downloadURL+++++', downloadURL);
 
-                    let imageURL = downloadURL
-                    console.log('task.fullpath=======',downloadURL);
+                    let imageURL = downloadURL;
+                    //console.log('task.fullpath=======',downloadURL);
                     let rootRef = firebase.database().ref().child('trip');
                     rootRef.orderByChild("tripName").equalTo(currentTrip).on('child_added', function (snapshot) {
                         if (snapshot.val().hasOwnProperty('imageFiles')) {
                             if (snapshot.val().members.indexOf(imgPostedBy) !== -1) {
-                                console.log("imageURL is there*************", snapshot.val().members.indexOf(imgPostedBy));
+                                //  console.log("imageURL is there*************", snapshot.val().members.indexOf(imgPostedBy));
                                 snapshot.ref.child('imageFiles').push({imageURL});
                             }
                         } else {
                             if (snapshot.val().members.indexOf(imgPostedBy) !== -1) {
-                                console.log("imageURL is not there");
+                                //   console.log("imageURL is not there");
                                 snapshot.ref.update({imageFiles: []});
                                 snapshot.ref.child('imageFiles').push({imageURL});
                             }
                         }
                     });
+                    //newImgAdded = imageURL;
                 }
             );
+            /* this.setState({
+             localArray: this.state.localArray.concat([newImgAdded])
+             }, () => {
+             console.log('after adding new url---',this.state.localArray);
+             })*/
+
         }
 
     }
@@ -99,7 +104,7 @@ class Storage extends Component{
                 this.setState({
                     localArray: imageUrlArray
                 },function(){
-                    console.log('localArray',this.state.localArray);
+                    //console.log('localArray',this.state.localArray);
                 })
             });
         }
@@ -150,6 +155,7 @@ class Storage extends Component{
 
     render(){
         let imagesArray = this.state.imageUrl;
+        //console.log("this.props.myimages @Storage161.....", this.props.myImages);
         return(
             <div>
                 <div className="image-upload-div">
@@ -165,7 +171,7 @@ class Storage extends Component{
 
                 </div>
 
-                <div>
+                <div className="download-div">
                     Download images:-
                     <ul className="image-render">
                         {this.props.myImages.map((item)=>(
@@ -173,29 +179,17 @@ class Storage extends Component{
                         ))}
                     </ul>
 
-                    <button onClick={this.onImgDownload.bind(this)}>Download images</button>
+                    <button className="signoutButton download-btn" onClick={this.onImgDownload.bind(this)}>Download images</button>
 
                     <div className="storage-downloads">
-                        {/* {imagesArray.map(function(url){
-                         <a href={url}>image link</a>
-                         })}
-                         */}
                         {
                             imagesArray.map((item)=>(
                                 <a download="ttn-app-image" href={item}>image link</a>
                             ))
                         }
-                        {/*{
-                         Object.keys(imagesArray).map(function(key) {
-                         <a href={key}>image link</a>
-                         })
-                         }*/}
+
                     </div>
 
-                    {/*<div className="storage-downloads">
-                     <img src={this.state.imageUrl}
-                     alt="downloaded-image"/>
-                     </div>*/}
                 </div>
             </div>
         );
@@ -204,3 +198,22 @@ class Storage extends Component{
 }
 
 export default Storage;
+
+/*
+ {imagesArray.map(function(url){
+ <a href={url}>image link</a>
+ })}
+
+
+ {
+ Object.keys(imagesArray).map(function(key) {
+ <a href={key}>image link</a>
+ })
+ }
+
+ <div className="storage-downloads">
+ <img src={this.state.imageUrl}
+ alt="downloaded-image"/>
+ </div>
+
+ */

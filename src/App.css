@@ -41,13 +41,24 @@
   cursor: pointer;
 
 }
-.signInButton{
+.signInButton, .signoutButton{
   background-color: #1ABC9C;
   color: white;
   padding: 14px 20px;
   border: none;
   margin-top: 21px;
   cursor: pointer;
+}
+
+.signoutButton {
+  display: block;
+  border-radius: 5px;
+}
+
+.download-btn {
+  padding: 5px 8px;
+  width: 100%;
+  margin: 4px;
 }
 
 img.avatar {
@@ -160,10 +171,29 @@ th {
   padding-left: 59px;
 }
 
+.trip-select-option {
+
+  margin-top: 20px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid #1ABC9C;
+}
+
+.save-btn {
+  background-color: #1ABC9C;
+  color: white;
+  padding: 14px 20px;
+  border: none;
+  margin-top: 21px;
+  cursor: pointer;
+}
+
 .billGenerator {
-  border: solid black;
+  border: 3px solid #1ABC9C;
   width: 75%;
-  margin: 0 auto;
+  margin: 20px auto;
+  padding:20px;
 }
 
 .modal-body>label {
@@ -194,7 +224,19 @@ th {
 }
 
 .image-upload-div {
+  margin-top: 20px;
+}
+
+.image-upload-div > input {
   margin-top: 10px;
+}
+
+.download-div{
+  margin-top:20px;
+}
+
+.download-div > button {
+  margin-top:5px;
 }
 
 .image-render {
@@ -219,4 +261,39 @@ th {
 
 .storage-downloads>a{
   display: block;
+}
+
+.expense {
+  height: 200px;
+  overflow: auto;
+}
+
+.my-transactions {
+  border: 2px solid #1ABC9C;
+  padding: 5px;
+  width: 90%;
+  margin: 5px auto;
+}
+.my-transactions>p {
+  margin: 5px 0;
+  color:  cadetblue;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.clear-btn {
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.trip-name {
+  text-transform: uppercase;
+  color: cadetblue;
+  font-weight: bold;
+}
+
+.submit-btn {
+  -webkit-border-radius: 21px;
+  -moz-border-radius: 21px;
+  border-radius: 21px;
 }

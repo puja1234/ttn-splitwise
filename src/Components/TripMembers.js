@@ -35,7 +35,7 @@ class TripMembers extends Component{
             createdAt :Date.now(),
             createdBy :this.props.user,
             transactions:[]
-        });
+        })
 
         billRef.push().set({
             id:key,
@@ -57,7 +57,7 @@ class TripMembers extends Component{
         return(
             <div>
                 {inputBox}
-                <button onClick={this.addToDb.bind(this)}>Save</button>
+                <button className="signoutButton" onClick={this.addToDb.bind(this)}>Save</button>
             </div>
         )
     }

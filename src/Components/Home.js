@@ -10,17 +10,17 @@ import Storage from './Storage'
 class Home extends Component {
     constructor(){
         super();
-       this.state={
-           newTrip:'',
-           memberCount:'',
-           trip:'',
-           myTrips:[],
-           tripInfo:'',
-           members:[],
-           viewExpense:false,
-           myImages:[],
-           displayStorage:false
-       };
+        this.state={
+            newTrip:'',
+            memberCount:'',
+            trip:'',
+            myTrips:[],
+            tripInfo:'',
+            members:[],
+            viewExpense:false,
+            myImages:[],
+            displayStorage:false
+        };
         this.clearState = this.clearState.bind(this);
     }
 
@@ -32,13 +32,14 @@ class Home extends Component {
         });
         let rootRef = firebase.database().ref().child('trip');
         rootRef.on('value', snap => {
-           let object1=snap.val();
+            myTripLocal=[];
+            let object1=snap.val();
             for(let key in object1){
                 let obj=object1[key];
-                console.log("Object is in home:",obj.members);
+                //console.log("Object is in home:",obj.members);
                 if(obj.members.indexOf(by)!==-1){
                     myTripLocal.push(obj);
-                    console.log("!!!!!!!!!",obj)
+                    //console.log("!!!!!!!!!",obj)
                 }
             }
             this.setState({
@@ -46,7 +47,7 @@ class Home extends Component {
             })
         });
         rootRef.on('child_added', snap => {
-            console.log('****child added',snap.val());
+            //console.log('****child added',snap.val());
         });
     }
 
@@ -64,27 +65,36 @@ class Home extends Component {
     }
 
     /*onChangeCategory(event){
-        if(event.target.value === 'Select Trip'){
-            alert("this cannot be a trip")
-        }else {
-            this.setState({
-                trip: event.target.value
-            }, () => {
-                this.state.myTrips.map((item)=>{
-                    if(item.tripName === this.state.trip){
-                        this.setState({
-                          tripInfo:item.tripName,
-                            members:item.members,
-                            viewExpense:true
-                        })
-                    }
-                })
-            })
-        }
-    }*/
+     if(event.target.value === 'Select Trip'){
+     alert("this cannot be a trip")
+     }else {
+     this.setState({
+     trip: event.target.value
+     }, () => {
+     this.state.myTrips.map((item)=>{
+     if(item.tripName === this.state.trip){
+     this.setState({
+     tripInfo:item.tripName,
+     members:item.members,
+     viewExpense:true
+     })
+     }
+     })
+     })
+     }
+     }*/
 
     onChangeCategory(event){
         let imageArray = [];
+        let that = this;
+        let updateImageState = function(){
+            that.setState({
+                myImages: imageArray,
+                displayStorage:true
+            },function(){
+                //console.log('imageArray',this.state.myImages);
+            });
+        }
         if(event.target.value === 'Select Trip'){
             alert("this cannot be a trip")
         }else {
@@ -105,16 +115,17 @@ class Home extends Component {
 
                 let rootRef = firebase.database().ref().child('trip');
                 rootRef.orderByChild("tripName").equalTo(this.state.trip).on('value', function (snapshot) {
-                    console.log('snapshot.val()',snapshot.val());
+                    //console.log('snapshot.val()',snapshot.val());
+                    imageArray=[];
                     if(snapshot.child !== -1) {
                         snapshot.forEach(function (childSnapshot) {
-                            console.log('$$$$$$$$$$', childSnapshot.val());
+                            //console.log('$$$$$$$$$$', childSnapshot.val());
                             if (childSnapshot.val().imageFiles !== -1) {
                                 childSnapshot.ref.child('imageFiles').on('value', function (imageSnap) {
                                     imageSnap.forEach(function (childImageSnap) {
                                         let url = childImageSnap.val().imageURL;
                                         //let imageName = url.replace(/^.*[\\\/]/, ''); //==============to get only name of picture from url.
-                                        console.log('**************************', url);
+                                        //console.log('**************************', url);
                                         imageArray.push(url);
 
                                     })
@@ -124,15 +135,9 @@ class Home extends Component {
                         })
 
                     }
-
+                    updateImageState();
                 });
 
-                this.setState({
-                    myImages: imageArray,
-                    displayStorage:true
-                },function(){
-                    console.log('imageArray',this.state.myImages);
-                })
 
             })
         }
@@ -151,6 +156,7 @@ class Home extends Component {
 
 
     render() {
+        //console.log('myimage in home.js',this.state.myImages);
 
         return (
             <div>
@@ -179,13 +185,13 @@ class Home extends Component {
                                         { this.state.displayStorage ?
                                             ' ' :
                                             <div>
-                                            <input className="trip"
-                                                   type="text"
-                                                   placeholder="Enter number of members"
-                                                   name="memberCount"
-                                                   onChange={this.onChangeHandler.bind(this)}
-                                                   value={this.state.memberCount}/>
-                                            < TripMembers memberCount={this.state.memberCount} trip={this.state.trip} user={this.props.user} clearState={this.clearState}/>
+                                                <input className="trip"
+                                                       type="text"
+                                                       placeholder="Enter number of members"
+                                                       name="memberCount"
+                                                       onChange={this.onChangeHandler.bind(this)}
+                                                       value={this.state.memberCount}/>
+                                                < TripMembers memberCount={this.state.memberCount} trip={this.state.trip} user={this.props.user} clearState={this.clearState}/>
                                             </div>
                                         }
                                     </div>
@@ -195,7 +201,7 @@ class Home extends Component {
                     </div>
 
 
-                    <select className="dropdown" onChange={this.onChangeCategory.bind(this)} value={this.state.trip}>
+                    <select className="dropdown trip-select-option" onChange={this.onChangeCategory.bind(this)} value={this.state.trip}>
                         <option value="Select Trip">Select Trip</option>
                         {this.state.myTrips.map((item)=>(
                             <option value={item.tripName}>{item.tripName}</option>
@@ -209,7 +215,7 @@ class Home extends Component {
                     }
 
 
-                    <button className="signInButton" onClick={this.logOut.bind(this)}>LogOut</button>
+                    <button className="signoutButton" onClick={this.logOut.bind(this)}>LogOut</button>
                 </div>
                 {this.state.viewExpense ?
                     <div>

@@ -73,8 +73,8 @@ class Expense extends Component {
         return (
             <div className="home">
                 <div className="billGenerator">
-                    <span className="trip-title">Welcome to Trip {this.props.tripInfo}</span>
-                    <h4 className="modal-title register-tag">Bill Generator</h4>
+                    <span className="trip-title">Welcome to Trip <label className="trip-name">{this.props.tripInfo}</label></span>
+                    <h4 className="modal-title register-tag">Spend By:</h4>
                         <div className="margin-from-top">
                             <label>Person's email:</label>
                             <select className="dropdown input-box" onChange={this.onChangeSpendBy.bind(this)}
@@ -109,7 +109,7 @@ class Expense extends Component {
                                                            onChange={this.changeHandler.bind(this)}
                             />
                         </div>
-                    <center><button onClick={this.onSubmit.bind(this)}>Submit</button></center>
+                    <center><button className="signoutButton submit-btn" onClick={this.onSubmit.bind(this)}>Submit</button></center>
                 </div>
                 <ExpenseTable tripName={this.props.tripInfo} user={this.props.user} />
 

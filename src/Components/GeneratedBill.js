@@ -218,16 +218,18 @@ class GeneratedBill extends Component {
         return (
             <div>
                 {this.state.debitor.map((item) =>(
-                    <div>
-                        <p>{item.creditor+"  "+item.amount}</p>
-                        <button onClick={this.payAmount.bind(this,item)}>Pay</button>
-                    </div>
+                <div className="my-transactions">
+                    <p>{item.creditor}</p>
+                    <p>Amount : <span>{item.amount}</span></p>
+                    <center><button className="signoutButton clear-btn" onClick={this.payAmount.bind(this,item)}>Pay</button></center>
+                </div>
                 ))}
 
                 {this.state.creditor.map((item) =>(
-                    <div>
-                        <p>{item.debitor+" "+item.amount}</p>
-                        <button onClick={this.clearAmount.bind(this,item)}>Clear</button>
+                    <div className="my-transactions">
+                        <p>{item.debitor}</p>
+                        <p>Amount : <span>{item.amount}</span></p>
+                        <center><button className="signoutButton clear-btn" onClick={this.clearAmount.bind(this,item)}>Clear</button></center>
                     </div>
                 ))}
             </div>

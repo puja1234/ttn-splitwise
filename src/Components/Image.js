@@ -25,7 +25,7 @@ class Image extends Component {
                 checked:true,
                 ImageUrl:this.props.source
             },function(){
-                console.log('$$$$$$$$$$$$$$$$$$$',this.state.checked,'DDDDDDDDDDDDD',this.state.ImageUrl);
+                //console.log('$$$$$$$$$$$$$$$$$$$',this.state.checked,'DDDDDDDDDDDDD',this.state.ImageUrl);
                 this.props.imageSelector(this.state.ImageUrl);
             })
         }
@@ -41,7 +41,7 @@ class Image extends Component {
     }
 
     render(){
-        console.log('this.props in image component---------------',this.props);
+        //console.log('this.props in image component---------------',this.props);
         return(
             <div>
                 <div>
