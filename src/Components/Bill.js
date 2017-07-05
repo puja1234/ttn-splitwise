@@ -185,7 +185,7 @@ class Bill extends Component {
             if(transactions[key].amount - share < 0){
                 console.log(transactions[key].spend_by , "is the debitor");
                 debitor.push({name:transactions[key].spend_by,amount:-(transactions[key].amount-share)})
-            }else{
+            }else if(transactions[key].amount - share > 0){
                 console.log(transactions[key].spend_by , "is the creditor");
                 creditor.push({name:transactions[key].spend_by,amount:transactions[key].amount-share})
             }
@@ -256,10 +256,7 @@ let status = 'pending';
                     <button onClick={this.generateBill.bind(this)}>Generate Bill</button>:
                     ''
                 }
-
-                    <GeneratedBill user={this.props.user} tripName={this.props.tripName}/>
-
-
+                <GeneratedBill user={this.props.user} tripName={this.props.tripName}/>
             </div>
         );
     }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../App.css';
+import TransactionTable from './TransactionTable'
 import * as firebase from 'firebase'
 
 class ExpenseTable extends Component {
@@ -43,7 +44,6 @@ class ExpenseTable extends Component {
         });
     }
 
-
     componentWillReceiveProps(){
         let tripName = this.props.tripName;
         console.log("inside table component :",tripName)
@@ -78,8 +78,6 @@ class ExpenseTable extends Component {
 
 
     render() {
-        console.log('=======================',this.props.tripName);
-
         let expenditures =[];
         let index=0;
         for (let key in this.state.trans2) {
@@ -95,14 +93,15 @@ class ExpenseTable extends Component {
                         <th>Expense By</th>
                         <th>Item</th>
                         <th>Amount</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
+
                     {expenditures.map((item)=> {
                         if(item.trip === this.props.tripTo){
                             return(
                                 <tr key={index++}>
-                                    <td>{item.spend_by}</td>
-                                    <td>{item.title}</td>
-                                    <td>{item.amount}</td>
+                                    <TransactionTable item = {item}/>
                                 </tr>
                             )
                         }

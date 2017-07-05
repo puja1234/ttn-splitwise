@@ -10,8 +10,42 @@ class Expense extends Component {
             spend_by: '',
             title: '',
             amount: '',
-
+            members :[]
         }
+    }
+
+    componentWillMount(){
+        let tripName = this.props.tripInfo;
+        let localMembers;
+        let that=this;
+        let rootRef = firebase.database().ref().child('trip');
+        rootRef.orderByChild("tripName").equalTo(tripName).once('value', snap => {
+            for(let key in snap.val()){
+                if (snap.val()[key].members.indexOf(this.props.user) !== -1) {
+                    localMembers = snap.val()[key].members
+                }
+            }
+            that.setState({
+                members:localMembers
+            })
+    })
+    }
+
+    componentWillReceiveProps(){
+        let tripName = this.props.tripInfo;
+        let localMembers;
+        let that=this;
+        let rootRef = firebase.database().ref().child('trip');
+        rootRef.orderByChild("tripName").equalTo(tripName).once('value', snap => {
+            for(let key in snap.val()){
+                if (snap.val()[key].members.indexOf(this.props.user) !== -1) {
+                    localMembers = snap.val()[key].members
+                }
+            }
+            that.setState({
+                members:localMembers
+            })
+        })
     }
 
     changeHandler(event) {
@@ -80,7 +114,7 @@ class Expense extends Component {
                             <select className="dropdown input-box" onChange={this.onChangeSpendBy.bind(this)}
                                     value={this.state.spend_by}>
                                 <option value="Select Trip">Select Person's email</option>
-                                {this.props.members.map((item) => (
+                                {this.state.members.map((item) => (
                                     <option value={item}>{item}</option>
                                 ))
                                 }

@@ -20,31 +20,32 @@ class Login extends Component {
             [event.target.name]:event.target.value
         })
     }
+
     login() {
         if(this.state.password === '' || this.state.email === ''){
             alert("fields cannot be empty");
         }
-        const auth = firebase.auth();
-        const promise = auth.signInWithEmailAndPassword(this.state.email, this.state.password);
-        promise.then(
-            firebase.auth().onAuthStateChanged(User => {
-                if (User) {
-                    this.setState({
-                        user: User
-                    },()=>{
-                        console.log("**********",this.state.user.email)
-                    });
-                } else {
-                    this.setState({
-                        user: ''
-                    })
-                }
+        else {
+            const auth = firebase.auth();
+            const promise = auth.signInWithEmailAndPassword(this.state.email, this.state.password);
+            promise.then(
+                firebase.auth().onAuthStateChanged(User => {
+                    if (User) {
+                        this.setState({
+                            user: User
+                        });
+                    } else {
+                        this.setState({
+                            user: ''
+                        })
+                    }
+                })
+            ).catch(e => {
+                this.setState({
+                    err: 'You are not Registered!!! '
+                })
             })
-        ).catch(e=>{
-            this.setState({
-                err:'You are not Registered!!! '
-            })
-        })
+        }
     }
 
     signIn(){
@@ -72,23 +73,15 @@ class Login extends Component {
     }
 
     googleSignIn(){
-        var user_auth;
-        var provider = new firebase.auth.GoogleAuthProvider();
+        let provider = new firebase.auth.GoogleAuthProvider();
         firebase.auth().signInWithPopup(provider).then(function(result) {
-            // var token = result.credential.accessToken;
-            user_auth = result.user;
-            console.log("user :",user_auth.providerData[0].photoURL)
+            console.log("user :",result)
         }).catch(function (error) {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-
-            console.log(errorCode);
-            console.log(errorMessage);
+            console.log(error);
         });
 
         firebase.auth().onAuthStateChanged(User => {
             if(User){
-                console.log("USer is:",User);
                 this.setState({
                     user:User,
                   photo:User.providerData[0].photoURL

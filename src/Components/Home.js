@@ -5,7 +5,7 @@ import * as firebase from 'firebase'
 import Expense from './Expense'
 import Bill from './Bill'
 import Storage from './Storage'
-
+import OriginalMembers from './OriginalMembers'
 
 class Home extends Component {
     constructor(){
@@ -19,7 +19,11 @@ class Home extends Component {
             members:[],
             viewExpense:false,
             myImages:[],
-            displayStorage:false
+            displayStorage:false,
+            showMembers : false,
+            localMembers : '',
+            deleteMembers : false,
+            showInput : false
         };
         this.clearState = this.clearState.bind(this);
     }
@@ -30,24 +34,21 @@ class Home extends Component {
         this.setState({
             myTrips:[]
         });
+
         let rootRef = firebase.database().ref().child('trip');
         rootRef.on('value', snap => {
             myTripLocal=[];
             let object1=snap.val();
             for(let key in object1){
                 let obj=object1[key];
-                //console.log("Object is in home:",obj.members);
                 if(obj.members.indexOf(by)!==-1){
                     myTripLocal.push(obj);
-                    //console.log("!!!!!!!!!",obj)
                 }
             }
+
             this.setState({
                 myTrips:myTripLocal
             })
-        });
-        rootRef.on('child_added', snap => {
-            //console.log('****child added',snap.val());
         });
     }
 
@@ -57,44 +58,22 @@ class Home extends Component {
 
     onChangeHandler(event){
         this.setState({
+            displayStorage:false,
             [event.target.name]: event.target.value
-        })
-        this.setState({
-            displayStorage:false
-        })
+        });
     }
-
-    /*onChangeCategory(event){
-     if(event.target.value === 'Select Trip'){
-     alert("this cannot be a trip")
-     }else {
-     this.setState({
-     trip: event.target.value
-     }, () => {
-     this.state.myTrips.map((item)=>{
-     if(item.tripName === this.state.trip){
-     this.setState({
-     tripInfo:item.tripName,
-     members:item.members,
-     viewExpense:true
-     })
-     }
-     })
-     })
-     }
-     }*/
 
     onChangeCategory(event){
         let imageArray = [];
         let that = this;
+        let tripMembers = 0;
         let updateImageState = function(){
             that.setState({
                 myImages: imageArray,
                 displayStorage:true
-            },function(){
-                //console.log('imageArray',this.state.myImages);
             });
-        }
+        };
+
         if(event.target.value === 'Select Trip'){
             alert("this cannot be a trip")
         }else {
@@ -109,29 +88,27 @@ class Home extends Component {
                             viewExpense:true,
                         })
                     }
-                })
-
-                //query for retrieving img files into a select dropdown
+                });
 
                 let rootRef = firebase.database().ref().child('trip');
                 rootRef.orderByChild("tripName").equalTo(this.state.trip).on('value', function (snapshot) {
-                    //console.log('snapshot.val()',snapshot.val());
                     imageArray=[];
                     if(snapshot.child !== -1) {
                         snapshot.forEach(function (childSnapshot) {
-                            //console.log('$$$$$$$$$$', childSnapshot.val());
+                         tripMembers =  childSnapshot.val().members.length;
                             if (childSnapshot.val().imageFiles !== -1) {
                                 childSnapshot.ref.child('imageFiles').on('value', function (imageSnap) {
                                     imageSnap.forEach(function (childImageSnap) {
                                         let url = childImageSnap.val().imageURL;
-                                        //let imageName = url.replace(/^.*[\\\/]/, ''); //==============to get only name of picture from url.
-                                        //console.log('**************************', url);
                                         imageArray.push(url);
-
                                     })
                                 })
                             }
                             return true;
+                        });
+
+                        that.setState({
+                            localMembers : tripMembers
                         })
 
                     }
@@ -145,19 +122,79 @@ class Home extends Component {
     }
 
     clearState(){
-        console.log("`````````````````")
         this.setState({
             trip:'',
             memberCount:''
-        },()=>{
-            console.log("```````````````",this.state.trip,this.state.memberCount)
         })
     }
 
+    editMembers(event){
+        this.setState({
+            localMembers : event.target.value,
+            showInput :true
+        })
+    }
+
+    editMembersDone(){
+        this.setState({
+            showInput:false
+        })
+    }
+
+    addMembers(){
+      this.setState({
+          showMembers:true,
+          deleteMembers : false
+      })
+    }
+
+    deleteMembersFunction(){
+        this.setState({
+            deleteMembers : true,
+            showMembers : false
+        })
+    }
+
+    deleteMembersDone(){
+        this.setState({
+            deleteMembers:false
+        })
+    }
+
+    deleteTrip(){
+
+        let rootRef = firebase.database().ref().child('trip');
+        let billRef = firebase.database().ref().child('bill');
+        let tripKey ,billKey;
+        let that = this;
+
+        alert(this.state.trip+" has been deleted ");
+        rootRef.orderByChild("tripName").equalTo(this.state.trip).once('child_added', function (snapshot) {
+            tripKey = snapshot.key;
+             rootRef.child(tripKey).remove();
+            billRef.orderByChild('id').equalTo(tripKey).once('child_added',function (billSnap) {
+                billKey = billSnap.key;
+                billRef.child(billKey).remove();
+            });
+             that.setState({
+                 newTrip:'',
+                 memberCount:'',
+                 trip:'',
+                 myTrips:[],
+                 tripInfo:'',
+                 members:[],
+                 viewExpense:false,
+                 myImages:[],
+                 displayStorage:false,
+                 showMembers : false,
+                 localMembers : '',
+                 deleteMembers : false,
+                 showInput : false
+             })
+        });
+    }
 
     render() {
-        //console.log('myimage in home.js',this.state.myImages);
-
         return (
             <div>
                 <div className="navContainer">
@@ -176,14 +213,25 @@ class Home extends Component {
                                         <h4 className="modal-title register-tag">Plan new Trip :)</h4>
                                     </div>
                                     <div className="modal-body">
+
+                                        {
+                                            this.state.displayStorage ?
+                                                <button onClick={this.deleteTrip.bind(this)}>Delete Trip</button> :
+                                                ''
+                                        }
+
                                         <input className="trip"
                                                type="text"
                                                placeholder="Enter new trip name or any event"
                                                name="trip"
                                                onChange={this.onChangeHandler.bind(this)}
                                                value={this.state.trip}/>
-                                        { this.state.displayStorage ?
-                                            ' ' :
+                                        {
+                                            this.state.displayStorage ?
+                                            <div>
+                                                <button onClick={this.addMembers.bind(this)}>Add members</button>
+                                                <button onClick={this.deleteMembersFunction.bind(this)}>Delete members</button>
+                                            </div> :
                                             <div>
                                                 <input className="trip"
                                                        type="text"
@@ -191,8 +239,55 @@ class Home extends Component {
                                                        name="memberCount"
                                                        onChange={this.onChangeHandler.bind(this)}
                                                        value={this.state.memberCount}/>
-                                                < TripMembers memberCount={this.state.memberCount} trip={this.state.trip} user={this.props.user} clearState={this.clearState}/>
+                                                < TripMembers
+                                                    memberCount={this.state.memberCount}
+                                                    trip={this.state.trip}
+                                                    user={this.props.user}
+                                                    clearState={this.clearState} />
                                             </div>
+                                        }
+                                        {
+                                            this.state.showMembers ?
+                                                <div>
+                                                    <input className="trip"
+                                                           type="text"
+                                                           placeholder="Enter number of members"
+                                                           name="localMembers"
+                                                           onChange={this.editMembers.bind(this)}
+                                                           value={this.state.localMembers}
+                                                    />
+                                                    <OriginalMembers
+                                                        trip={this.state.trip}
+                                                        user={this.props.user}
+                                                    />
+                                                    {
+                                                        this.state.showInput ?
+                                                            <TripMembers
+                                                                memberCount={this.state.localMembers}
+                                                                trip={this.state.trip}
+                                                                user={this.props.user}
+                                                                clearState={this.clearState}
+                                                                hasoriginalMembers = {this.state.showInput}
+                                                                editMembersDone = {this.editMembersDone.bind(this)}
+                                                            /> :
+                                                            ''
+                                                    }
+
+                                                </div> :
+                                                ''
+                                        }
+                                        {
+
+                                            this.state.deleteMembers ?
+                                                <div>
+                                                    <OriginalMembers
+                                                        trip={this.state.trip}
+                                                        user={this.props.user}
+                                                        deleteMembers={this.state.deleteMembers}
+                                                        deleteMembersDone = {this.deleteMembersDone.bind(this)}
+                                                    />
+                                                </div> :
+                                                ''
                                         }
                                     </div>
                                 </div>
@@ -209,17 +304,19 @@ class Home extends Component {
                     </select>
                     {
                         this.state.displayStorage ?
-                            <Storage trip={this.state.trip} user={this.props.user} myImages={this.state.myImages}/>
+                            <Storage trip={this.state.trip}
+                                     user={this.props.user}
+                                     myImages={this.state.myImages}/>
                             :
                             ''
                     }
 
-
-                    <button className="signoutButton" onClick={this.logOut.bind(this)}>LogOut</button>
+                    <button className="signoutButton"
+                            onClick={this.logOut.bind(this)}>LogOut</button>
                 </div>
                 {this.state.viewExpense ?
                     <div>
-                        <Expense tripInfo={this.state.trip} members={this.state.members}  user={this.props.user}/>
+                        <Expense tripInfo={this.state.trip}  user={this.props.user}/>
                         <Bill tripName={this.state.trip} members={this.state.members} user={this.props.user}/>
                     </div>:''}
             </div>
