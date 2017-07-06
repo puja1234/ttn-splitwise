@@ -9,10 +9,9 @@ class Login extends Component {
         this.state={
             email:'',
             password:'',
-            user:'',
+
             err:'',
-            photo:''
-        }
+        };
     }
 
     changeHandler(event){
@@ -28,7 +27,7 @@ class Login extends Component {
         else {
             const auth = firebase.auth();
             const promise = auth.signInWithEmailAndPassword(this.state.email, this.state.password);
-            promise.then(
+            promise/*.then(
                 firebase.auth().onAuthStateChanged(User => {
                     if (User) {
                         this.setState({
@@ -40,7 +39,7 @@ class Login extends Component {
                         })
                     }
                 })
-            ).catch(e => {
+            )*/.catch(e => {
                 this.setState({
                     err: 'You are not Registered!!! '
                 })
@@ -48,39 +47,43 @@ class Login extends Component {
         }
     }
 
-    signIn(){
-        if(this.state.password === '' || this.state.email === ''){
+    signIn() {
+        if (this.state.password === '' || this.state.email === '') {
             alert("Fields cannot be empty");
-        }else {
+        } else {
             const auth = firebase.auth();
             const promise = auth.createUserWithEmailAndPassword(this.state.email, this.state.password);
             promise.catch(e => {
                 console.log(e.message)
             });
 
-            firebase.auth().onAuthStateChanged(User => {
-                if (User) {
-                    this.setState({
-                        user: User
-                    });
-                } else {
-                    this.setState({
-                        user: ''
-                    })
-                }
-            })
+            /* firebase.auth().onAuthStateChanged(User => {
+             if (User) {
+             this.setState({
+             user: User
+             });
+             } else {
+             this.setState({
+             user: ''
+             })
+             }
+             })
+             }*/
         }
-    }
 
+    }
     googleSignIn(){
         let provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider).then(function(result) {
+         const promise = firebase.auth().signInWithRedirect(provider);
+         promise.catch(e =>{
+             console.log(e.message)
+         })/*.then(function(result) {
             console.log("user :",result)
         }).catch(function (error) {
             console.log(error);
-        });
+        });*/
 
-        firebase.auth().onAuthStateChanged(User => {
+       /* firebase.auth().onAuthStateChanged(User => {
             if(User){
                 this.setState({
                     user:User,
@@ -91,48 +94,42 @@ class Login extends Component {
                     user:''
                 })
             }
-        })
+        })*/
 
     }
 
     render() {
         return (
             <div className="login">
-                {this.state.user ?
-                    <div>
-                        <Home user={this.state.user.email} photo={this.state.photo}/>
+                <div className="loginForm">
+                    {this.state.err}
+                    <div className="imgcontainer">
+                        <img src="https://en.opensuse.org/images/0/0b/Icon-user.png" alt="Avatar" className="avatar"/>
                     </div>
-                    :
-                    <div className="loginForm">
-                        {this.state.err}
-                        <div className="imgcontainer">
-                            <img src="https://en.opensuse.org/images/0/0b/Icon-user.png" alt="Avatar" className="avatar"/>
-                        </div>
-                        <div className="container">
-                            <div><label><b>Username</b></label></div>
-                            <input className="emailInput"
-                                   type="text"
-                                   placeholder="Enter email"
-                                   name="email"
-                                   value={this.state.email}
-                                   onChange={this.changeHandler.bind(this)}
-                            />
-                            <div><label><b>Password</b></label></div>
-                            <input type="password"
-                                   className="pswdInput"
-                                   placeholder="Enter Password"
-                                   name="password"
-                                   value={this.state.password}
-                                   onChange={this.changeHandler.bind(this)}
-                            />
-                            <div className="login">
-                                <button className="loginButton" onClick={this.login.bind(this)}>Login</button>
-                                <button className="signInButton" onClick={this.signIn.bind(this)}>Sign In</button>
-                                <button className="signInButton" onClick={this.googleSignIn.bind(this)}>Sign In with G+</button>
-                            </div>
+                    <div className="container">
+                        <div><label><b>Username</b></label></div>
+                        <input className="emailInput"
+                               type="text"
+                               placeholder="Enter email"
+                               name="email"
+                               value={this.state.email}
+                               onChange={this.changeHandler.bind(this)}
+                        />
+                        <div><label><b>Password</b></label></div>
+                        <input type="password"
+                               className="pswdInput"
+                               placeholder="Enter Password"
+                               name="password"
+                               value={this.state.password}
+                               onChange={this.changeHandler.bind(this)}
+                        />
+                        <div className="login">
+                            <button className="loginButton" onClick={this.login.bind(this)}>Login</button>
+                            <button className="signInButton" onClick={this.signIn.bind(this)}>Sign In</button>
+                            <button className="signInButton" onClick={this.googleSignIn.bind(this)}>Sign In with G+</button>
                         </div>
                     </div>
-                }
+                </div>
             </div>
         );
     }

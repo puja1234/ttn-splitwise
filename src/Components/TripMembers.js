@@ -14,14 +14,21 @@ class TripMembers extends Component{
 
     addMember(name){
         const { members } = this.state;
-        members.push(name);
-        this.setState({
-            members,
-        },()=>{
-            console.log(this.state.members, 'members------')
-        })
+
+        console.log(members,name,members.indexOf(name));
+        if(members.indexOf(name) == -1 ){
+            members.push(name);
+            this.setState({
+                members,
+            },()=>{
+                console.log(this.state.members, 'members------')
+            })
+        }else{
+            alert("same email members are not allowed!!")
+        }
 
     }
+
     addToDb(){
         //since firebase does not support array so storing members as object structure
         let rootRef = firebase.database().ref().child('trip');
