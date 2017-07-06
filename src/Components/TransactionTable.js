@@ -25,20 +25,20 @@ class TransactionTable extends Component {
         return(
             <div className="expenseTable">{
                 this.state.edit ?
-                    <div>
+                    <tr>
                         <input type="text" value={item.spend_by} />
                         <input type="text" value={item.title}/>
                         <input type="text" value={item.amount}/>
                         <td><button>Save</button></td>
-                    </div> :
-                    <div>
-                        <td>{item.spend_by}</td>
-                        <td>{item.title}</td>
-                        <td>{item.amount}</td>
-                        <td><button onClick={this.editTransaction.bind(this,item)}>Edit</button></td>
-                        <td><button onClick={this.deleteTransaction.bind(this,item)}>Delete</button></td>
-                    </div>
-            }
+                    </tr>:
+
+                       <tr>
+                            <td>{item.spend_by}</td>
+                            <td>{item.title}</td>
+                            <td>{item.amount}</td>
+                            <td><button onClick={this.deleteTransaction.bind(this,item)}>Delete</button></td>
+                        </tr>
+                }
             </div>
         )
     }

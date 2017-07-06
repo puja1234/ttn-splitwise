@@ -240,13 +240,13 @@ let status = 'pending';
                     console.log("#######3",billSnap.val());
                     if (billSnap.val().hasOwnProperty('bills')) {
                         console.log("bill is there %%%%%%%%%%%%%%55",accounts);
-                           let billPush = billSnap.ref.child('bills').push();
-                           billPush.set({accounts})
+                        let billPush = billSnap.ref.child('bills').push();
+                        billPush.set({accounts,generatedDate:Date.now()})
 
                     } else {
                         console.log("bill is not there%%%%%%%%%%%%%%%%");
-                            billSnap.ref.update({bills: []});
-                            billSnap.ref.child('bills').push({accounts});
+                        billSnap.ref.update({bills: []});
+                        billSnap.ref.child('bills').push({accounts,generatedDate:Date.now()});
                         }
 
                 });
