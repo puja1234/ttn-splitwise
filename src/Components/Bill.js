@@ -10,13 +10,14 @@ class Bill extends Component {
             displayButton:false,
             trans:'',
             trans2:'',
-            displayBill:false
+            displayBill:false,
+            members:''
         }
     }
 
     componentDidMount(){
         let tripName = this.props.tripName;
-
+        let localMembers ;
         let rootRef = firebase.database().ref().child('trip');
         rootRef.orderByChild("tripName").equalTo(tripName).once('value', snap => {
             this.setState({
@@ -25,6 +26,7 @@ class Bill extends Component {
                 for(let key in this.state.trans){
                     if(this.state.trans.hasOwnProperty(key)) {
                         if (this.state.trans[key].members.indexOf(this.props.user) !== -1) {
+                            localMembers = this.state.trans[key].members;
                             this.setState({
                                 trans2: this.state.trans[key].transaction
                             }, () => {
@@ -47,12 +49,17 @@ class Bill extends Component {
                         }
                     }
                 }
+
+                this.setState({
+                    members:localMembers
+                })
             });
         });
     }
 
     componentWillReceiveProps(){
         let tripName = this.props.tripName;
+        let localMembers;
         console.log("inside table component :",tripName);
         let rootRef = firebase.database().ref().child('trip');
         rootRef.orderByChild("tripName").equalTo(tripName).once('value', snap => {
@@ -62,6 +69,7 @@ class Bill extends Component {
                 for(let key in this.state.trans){
                     if(this.state.trans.hasOwnProperty(key)) {
                         if (this.state.trans[key].members.indexOf(this.props.user) !== -1) {
+                            localMembers = this.state.trans[key].members;
                             this.setState({
                                 trans2: this.state.trans[key].transaction
                             }, () => {
@@ -84,6 +92,9 @@ class Bill extends Component {
                         }
                     }
                 }
+                this.setState({
+                    members : localMembers
+                })
             });
         });
     }
@@ -139,11 +150,11 @@ class Bill extends Component {
 
         //update bill table add bills to it
 
-        console.log("members are :",this.props.members.length);
+        console.log("members are :",this.state.members.length);
         console.log(" total amount is :",totalAmount);
-        let share = totalAmount/this.props.members.length;
+        let share = totalAmount/this.state.members.length;
         console.log("share is :",share);
-        console.log("transactions are in array :",transactions,this.props.members);
+        console.log("transactions are in array :",transactions,this.state.members);
         let debitor =[];
         let creditor =[];
 
@@ -154,14 +165,14 @@ class Bill extends Component {
 
             }
         }*/
-       let found = true;
-      let  members = this.props.members;
-      var k = 0;
-       for(k=0;k<members.length;k++){
-           if(found === false){
-               console.log(members[k-1], "  has not spend any thing%%%%%%%%%%%");
-               debitor.push({name:members[k-1],amount:share})
-           }
+        let found = true;
+        let  members = this.state.members;
+        var k = 0;
+        for(k=0;k<members.length;k++){
+            if(found === false){
+                console.log(members[k-1], "  has not spend any thing%%%%%%%%%%%");
+                debitor.push({name:members[k-1],amount:share})
+            }
                found = false;
            for(let key in transactions){
                if(members[k] === transactions[key].spend_by){

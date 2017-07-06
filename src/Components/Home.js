@@ -317,7 +317,7 @@ class Home extends Component {
                 {this.state.viewExpense ?
                     <div>
                         <Expense tripInfo={this.state.trip}  user={this.props.user}/>
-                        <Bill tripName={this.state.trip} members={this.state.members} user={this.props.user}/>
+                        <Bill tripName={this.state.trip} user={this.props.user}/>
                     </div>:''}
             </div>
         );
