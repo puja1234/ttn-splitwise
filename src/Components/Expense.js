@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import '../App.css';
 import ExpenseTable from './ExpenseTable'
+import TopNavBar from './TopNavBar'
 import * as firebase from 'firebase'
 
 class Expense extends Component {
@@ -10,6 +11,7 @@ class Expense extends Component {
             spend_by: '',
             title: '',
             amount: '',
+            expenseBtnDisplay:false
 
         }
     }
@@ -23,7 +25,7 @@ class Expense extends Component {
     onSubmit(event) {
         event.preventDefault();
         let user=this.props.user;
-        let trip = this.props.tripInfo;
+        let trip = this.props.trip;
         console.log("trip on button click is :", trip);
         let regex = /^[0-9]{1,10}$/;
         if (this.state.spend_by === '' || this.state.amount === '' || this.state.title === '') {
@@ -39,15 +41,15 @@ class Expense extends Component {
                 generatedBill : false
             };
             rootRef.orderByChild("tripName").equalTo(trip).on('child_added', function (snap) {
-                console.log("^^^^^^^^^^^^^^^^^",transactioObject)
+                //console.log("^^^^^^^^^^^^^^^^^",transactioObject)
                 if (snap.val().hasOwnProperty('transaction')) {
                     if(snap.val().members.indexOf(user)!==-1) {
-                        console.log("transaction is there*************", snap.val().members.indexOf(user));
+                        //console.log("transaction is there*************", snap.val().members.indexOf(user));
                         snap.ref.child('transaction').push({transactioObject});
                     }
                 } else {
                     if(snap.val().members.indexOf(user)!==-1) {
-                        console.log("transaction is not there");
+                        //console.log("transaction is not there");
                         snap.ref.update({transaction: []});
                         snap.ref.child('transaction').push({transactioObject});
                     }
@@ -68,13 +70,40 @@ class Expense extends Component {
         })
     }
 
+    showMyExpense = () => {
+        let expenseData = {
+            trip : this.props.trip,
+            members : this.props.members,
+            user : this.props.user
+        }
+        console.log('passing props to app.js from expense.js',expenseData);
+        this.props.fetchExpenseData(expenseData);
+        this.props.history.push({
+            pathname: '/myExpense',
+        })
+
+    }
+
     render() {
-        console.log('>>>>>>>>>', this.props.tripInfo);
-        return (
-            <div className="home">
-                <div className="billGenerator">
-                    <span className="trip-title">Welcome to Trip <label className="trip-name">{this.props.tripInfo}</label></span>
-                    <h4 className="modal-title register-tag">Spend By:</h4>
+        //console.log('>>>>>>>>>', this.props.tripInfo);
+        console.log('this.props from app.js in expense.js-------',this.props);
+        let template;
+        if(this.props.trip == '' || this.props.members == '' || this.props.user == ''){
+            template = (
+                <div>
+                    <TopNavBar/>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp6Ejpb0K1GIqZLaQw4KT4FnKULVglvOHVKN5YJa_gfMES29GK"
+                         alt="some image" />
+                </div>
+            )
+        }
+        else{
+            <div>
+                <TopNavBar/>
+                <div className="home">
+                    <div className="billGenerator">
+                        <span className="trip-title">Welcome to Trip <label className="trip-name">{this.props.trip}</label></span>
+                        <h4 className="modal-title register-tag">Spend By:</h4>
                         <div className="margin-from-top">
                             <label>Person's email:</label>
                             <select className="dropdown input-box" onChange={this.onChangeSpendBy.bind(this)}
@@ -91,29 +120,41 @@ class Expense extends Component {
                         <div className="margin-from-top">
                             <label>Spend on:</label>
                             <input type="text"
-                                                            className="input-box"
-                                                            value={this.state.title}
-                                                            name="title"
-                                                            placeholder="Title"
-                                                            onChange={this.changeHandler.bind(this)}
+                                   className="input-box"
+                                   value={this.state.title}
+                                   name="title"
+                                   placeholder="Title"
+                                   onChange={this.changeHandler.bind(this)}
                             />
                         </div>
 
                         <div className="margin-from-top">
                             <label>Amount :</label>
                             <input type="text"
-                                                           className="input-box"
-                                                           value={this.state.amount}
-                                                           name="amount"
-                                                           placeholder="Amount"
-                                                           onChange={this.changeHandler.bind(this)}
+                                   className="input-box"
+                                   value={this.state.amount}
+                                   name="amount"
+                                   placeholder="Amount"
+                                   onChange={this.changeHandler.bind(this)}
                             />
                         </div>
-                    <center><button className="signoutButton submit-btn" onClick={this.onSubmit.bind(this)}>Submit</button></center>
-                </div>
-                <ExpenseTable tripName={this.props.tripInfo} user={this.props.user} />
+                        <center><button className="signoutButton submit-btn" onClick={this.onSubmit.bind(this)}>Submit</button></center>
+                    </div>
+                    <ExpenseTable tripName={this.props.trip} user={this.props.user} expenseBtnDisplay={this.state.expenseBtnDisplay}/>
 
+                    {/*{this.state.expenseBtnDisplay?*/}
+                        <button onClick={this.showMyExpense.bind(this)}>Show My Expenses</button>
+                    {/* : ''}*/}
+
+
+                </div>
             </div>
+        }
+        return (
+            <div>
+                {template}
+            </div>
+
 
         );
     }

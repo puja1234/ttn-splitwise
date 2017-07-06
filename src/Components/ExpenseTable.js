@@ -13,7 +13,7 @@ class ExpenseTable extends Component {
 
     componentDidMount(){
         let tripName = this.props.tripName;
-        console.log("inside table component :",tripName);
+        //console.log("inside table component :",tripName);
         let rootRef = firebase.database().ref().child('trip');
         rootRef.orderByChild("tripName").equalTo(tripName).on('value', snap => {
             this.setState({
@@ -46,13 +46,13 @@ class ExpenseTable extends Component {
 
     componentWillReceiveProps(){
         let tripName = this.props.tripName;
-        console.log("inside table component :",tripName)
+        //console.log("inside table component :",tripName)
         let rootRef = firebase.database().ref().child('trip');
         rootRef.orderByChild("tripName").equalTo(tripName).on('value', snap => {
             this.setState({
                 trans:snap.val()
             },()=>{
-                console.log("inside table :",this.state.trans)
+                //console.log("inside table :",this.state.trans)
                 for(let key in this.state.trans){
                     if(this.state.trans.hasOwnProperty(key)) {
                         if (this.state.trans[key].members.indexOf(this.props.user) !== -1) {
@@ -60,7 +60,7 @@ class ExpenseTable extends Component {
                             this.setState({
                                 trans2: this.state.trans[key].transaction
                             }, () => {
-                                console.log("inside table component :", this.state.trans2)
+                                //console.log("inside table component :", this.state.trans2)
 
                             })
                         }

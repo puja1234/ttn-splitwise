@@ -297,3 +297,9 @@ th {
   -moz-border-radius: 21px;
   border-radius: 21px;
 }
+
+.tab-links {
+  float: right;
+  margin:3px;
+  padding:3px;
+}

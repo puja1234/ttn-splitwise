@@ -33,10 +33,10 @@ class MemberDetails extends Component{
     render(){
         return(
             <div>
-                <input type="text" onChange={this.changeHandler.bind(this)} placeholder="Enter members" value={this.state.memberDetail}/>
+                <input type="text" onChange={this.changeHandler.bind(this)} placeholder="Enter member's mail id" value={this.state.memberDetail}/>
                 {this.state.view
                     ?
-                    <button onClick={this.doneHandler.bind(this)}>Done </button>
+                    <button className="signoutButton clear-btn" onClick={this.doneHandler.bind(this)}>Done </button>
                 :
                 ''}
             </div>

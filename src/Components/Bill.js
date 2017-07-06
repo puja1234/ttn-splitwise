@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../App.css';
 import * as firebase from 'firebase'
 import GeneratedBill from './GeneratedBill'
+import TopNavBar from './TopNavBar'
 
 class Bill extends Component {
     constructor(props){
@@ -15,6 +16,7 @@ class Bill extends Component {
     }
 
     componentDidMount(){
+        console.log('this.props-------Bill.js CDM--',this.props);
         let tripName = this.props.tripName;
 
         let rootRef = firebase.database().ref().child('trip');
@@ -52,6 +54,7 @@ class Bill extends Component {
     }
 
     componentWillReceiveProps(){
+        console.log('this.props-----------Bill.js CWRP------',this.props);
         let tripName = this.props.tripName;
         console.log("inside table component :",tripName);
         let rootRef = firebase.database().ref().child('trip');
@@ -249,11 +252,13 @@ let status = 'pending';
     }
 
     render() {
+        console.log('render of bill.js----------',this.props);
         return (
             <div className="totalExpense">
+                <TopNavBar/>
                 <div className="myExpenses">My Expense</div>
                 {this.state.displayButton ?
-                    <button onClick={this.generateBill.bind(this)}>Generate Bill</button>:
+                    <button className="signoutButton clear-btn" onClick={this.generateBill.bind(this)}>Generate Bill</button>:
                     ''
                 }
 
