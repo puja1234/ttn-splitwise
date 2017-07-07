@@ -21,6 +21,7 @@ class App extends Component {
                     photo:User.providerData[0].photoURL,
                     authStatusChecked:true
                 });
+
             }else{
                 this.setState({
                     user:'',
@@ -29,7 +30,7 @@ class App extends Component {
             }
         });
 
-        let that = this;
+        let that=this;
         firebase.auth().getRedirectResult().then(function(result) {
             console.log("redirected url");
             if (result) {
@@ -47,13 +48,8 @@ class App extends Component {
 
 
   render() {
-        console.log("hieeeeeeeee");
     return (
         <div className="mainContainer">
-            <div className="navbar">
-                <div className="logo">SPLITWISE</div>
-                <img className="userImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC4Ammc_cwp2lqbkJQzf9r3NaiwdaVqjgka1B56cQuxqrA4D4b" alt="hehe"/>
-            </div>
             {this.state.authStatusChecked ?
                 this.state.user ?
                     <Home user={this.state.user.email} photo={this.state.photo}/>

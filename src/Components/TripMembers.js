@@ -90,7 +90,7 @@ class TripMembers extends Component{
         return(
             <div>
                 {inputBox}
-                <button className="signoutButton" onClick={this.addToDb.bind(this)}>Save</button>
+                <button className="" onClick={this.addToDb.bind(this)}>Save</button>
             </div>
         )
     }

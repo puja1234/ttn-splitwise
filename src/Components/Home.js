@@ -6,6 +6,7 @@ import Expense from './Expense'
 import Bill from './Bill'
 import Storage from './Storage'
 import OriginalMembers from './OriginalMembers'
+import { BrowserRouter as Router, Route ,Link} from 'react-router-dom'
 
 class Home extends Component {
     constructor(){
@@ -59,6 +60,9 @@ class Home extends Component {
     onChangeHandler(event){
         this.setState({
             displayStorage:false,
+            showMembers:false,
+            viewExpense:false,
+            deleteMembers : false,
             [event.target.name]: event.target.value
         });
     }
@@ -197,13 +201,20 @@ class Home extends Component {
     render() {
         return (
             <div>
+                <div className="navbar">
+                    <a className="logo">SPLITWISE</a>
+                    <img className="userImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC4Ammc_cwp2lqbkJQzf9r3NaiwdaVqjgka1B56cQuxqrA4D4b" alt="hehe"/>
+                    <button className="signoutButton"
+                            onClick={this.logOut.bind(this)}>LogOut</button>
+                    <a className="links" href='/home/gallery'> View Gallery </a>
+                    <a className="links" href='/home/myExpense'> View Expense </a>
+                </div>
+
                 <div className="navContainer">
                     <div>
                         <center><img className="friendsImage" src={this.props.photo}  /></center>
                         <div className="myEmail color-green-text"><label>{this.props.user}</label></div>
                     </div>
-
-
                     <div className="searchingAdding">
 
                         <div id="modalTrip" className="modal fade register-modal" role="dialog">
@@ -311,8 +322,7 @@ class Home extends Component {
                             ''
                     }
 
-                    <button className="signoutButton"
-                            onClick={this.logOut.bind(this)}>LogOut</button>
+
                 </div>
                 {this.state.viewExpense ?
                     <div>

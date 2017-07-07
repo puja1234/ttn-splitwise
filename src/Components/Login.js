@@ -101,6 +101,10 @@ class Login extends Component {
     render() {
         return (
             <div className="login">
+                <div className="navbar">
+                    <a className="logo">SPLITWISE</a>
+                    <img className="userImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC4Ammc_cwp2lqbkJQzf9r3NaiwdaVqjgka1B56cQuxqrA4D4b" alt="hehe"/>
+                </div>
                 <div className="loginForm">
                     {this.state.err}
                     <div className="imgcontainer">

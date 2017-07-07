@@ -143,7 +143,7 @@ class Expense extends Component {
                                                            onChange={this.changeHandler.bind(this)}
                             />
                         </div>
-                    <center><button className="signoutButton submit-btn" onClick={this.onSubmit.bind(this)}>Submit</button></center>
+                    <center><button className="submit-btn" onClick={this.onSubmit.bind(this)}>Submit</button></center>
                 </div>
                 <ExpenseTable tripName={this.props.tripInfo} user={this.props.user} />
 
