@@ -90,7 +90,7 @@ class TripMembers extends Component{
         return(
             <div>
                 {inputBox}
-                <button className="" onClick={this.addToDb.bind(this)}>Save</button>
+                <button className="common-btn" onClick={this.addToDb.bind(this)}>Save</button>
             </div>
         )
     }

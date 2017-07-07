@@ -148,7 +148,7 @@ class ExpenseTable extends Component {
                     {expenditures.map((item)=> {
                         if(item.trip === this.props.tripTo){
                             return(
-                                <div>{
+                                <div >{
                                     item.generatedBill ?
                                         <tr>
                                             <td>{item.spend_by}</td>
@@ -161,8 +161,8 @@ class ExpenseTable extends Component {
                                             <td>{item.spend_by}</td>
                                             <td>{item.title}</td>
                                             <td>{item.amount}</td>
-                                            <td><button onClick={this.deleteTransaction.bind(this,item)}>Delete</button></td>
-                                            <td><button onClick={this.editTransaction.bind(this,item)}>Edit</button></td>
+                                            <td><button className="common-btn" onClick={this.deleteTransaction.bind(this,item)}>Delete</button></td>
+                                            <td><button className="common-btn" onClick={this.editTransaction.bind(this,item)}>Edit</button></td>
                                         </tr>
                                     }
                                 </div>

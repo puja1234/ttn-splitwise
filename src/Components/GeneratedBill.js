@@ -221,7 +221,7 @@ class GeneratedBill extends Component {
                 <div className="my-transactions">
                     <p>{item.creditor}</p>
                     <p>Amount : <span>{item.amount}</span></p>
-                    <center><button className=" clear-btn" onClick={this.payAmount.bind(this,item)}>Pay</button></center>
+                    <center><button className=" clear-btn common-btn" onClick={this.payAmount.bind(this,item)}>Pay</button></center>
                 </div>
                 ))}
 
@@ -229,7 +229,7 @@ class GeneratedBill extends Component {
                     <div className="my-transactions">
                         <p>{item.debitor}</p>
                         <p>Amount : <span>{item.amount}</span></p>
-                        <center><button className=" clear-btn" onClick={this.clearAmount.bind(this,item)}>Clear</button></center>
+                        <center><button className=" clear-btn common-btn" onClick={this.clearAmount.bind(this,item)}>Clear</button></center>
                     </div>
                 ))}
             </div>

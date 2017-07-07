@@ -29,7 +29,7 @@ class TransactionTable extends Component {
                         <input type="text" value={item.spend_by} />
                         <input type="text" value={item.title}/>
                         <input type="text" value={item.amount}/>
-                        <td><button>Save</button></td>
+                        <td><button className="common-btn">Save</button></td>
                     </tr>:
 
                        <tr>

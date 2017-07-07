@@ -227,7 +227,7 @@ class Home extends Component {
 
                                         {
                                             this.state.displayStorage ?
-                                                <button onClick={this.deleteTrip.bind(this)}>Delete Trip</button> :
+                                                <button className="common-btn" onClick={this.deleteTrip.bind(this)}>Delete Trip</button> :
                                                 ''
                                         }
 
@@ -239,9 +239,9 @@ class Home extends Component {
                                                value={this.state.trip}/>
                                         {
                                             this.state.displayStorage ?
-                                            <div>
-                                                <button onClick={this.addMembers.bind(this)}>Add members</button>
-                                                <button onClick={this.deleteMembersFunction.bind(this)}>Delete members</button>
+                                            <div className="delete-add-members">
+                                                <button className="common-btn add-del-btn" onClick={this.addMembers.bind(this)}>Add members</button>
+                                                <button className="common-btn add-del-btn" onClick={this.deleteMembersFunction.bind(this)}>Delete members</button>
                                             </div> :
                                             <div>
                                                 <input className="trip"

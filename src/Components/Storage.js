@@ -179,7 +179,7 @@ class Storage extends Component{
                         ))}
                     </ul>
 
-                    <button className="signoutButton download-btn" onClick={this.onImgDownload.bind(this)}>Download images</button>
+                    <button className="common-btn download-btn" onClick={this.onImgDownload.bind(this)}>Download images</button>
 
                     <div className="storage-downloads">
                         {

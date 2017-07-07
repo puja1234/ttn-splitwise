@@ -10,40 +10,40 @@ class Expense extends Component {
             spend_by: '',
             title: '',
             amount: '',
-            members :[]
+            members: []
         }
     }
 
-    componentWillMount(){
+    componentWillMount() {
         let tripName = this.props.tripInfo;
         let localMembers;
-        let that=this;
+        let that = this;
         let rootRef = firebase.database().ref().child('trip');
         rootRef.orderByChild("tripName").equalTo(tripName).once('value', snap => {
-            for(let key in snap.val()){
+            for (let key in snap.val()) {
                 if (snap.val()[key].members.indexOf(this.props.user) !== -1) {
                     localMembers = snap.val()[key].members
                 }
             }
             that.setState({
-                members:localMembers
+                members: localMembers
             })
-    })
+        })
     }
 
-    componentWillReceiveProps(){
+    componentWillReceiveProps() {
         let tripName = this.props.tripInfo;
         let localMembers;
-        let that=this;
+        let that = this;
         let rootRef = firebase.database().ref().child('trip');
         rootRef.orderByChild("tripName").equalTo(tripName).once('value', snap => {
-            for(let key in snap.val()){
+            for (let key in snap.val()) {
                 if (snap.val()[key].members.indexOf(this.props.user) !== -1) {
                     localMembers = snap.val()[key].members
                 }
             }
             that.setState({
-                members:localMembers
+                members: localMembers
             })
         })
     }
@@ -56,7 +56,7 @@ class Expense extends Component {
 
     onSubmit(event) {
         event.preventDefault();
-        let user=this.props.user;
+        let user = this.props.user;
         let trip = this.props.tripInfo;
         console.log("trip on button click is :", trip);
         let regex = /^[0-9]{1,10}$/;
@@ -70,17 +70,17 @@ class Expense extends Component {
                 spend_by: this.state.spend_by,
                 amount: this.state.amount,
                 title: this.state.title,
-                generatedBill : false
+                generatedBill: false
             };
             rootRef.orderByChild("tripName").equalTo(trip).on('child_added', function (snap) {
-                console.log("^^^^^^^^^^^^^^^^^",transactioObject)
+                console.log("^^^^^^^^^^^^^^^^^", transactioObject)
                 if (snap.val().hasOwnProperty('transaction')) {
-                    if(snap.val().members.indexOf(user)!==-1) {
+                    if (snap.val().members.indexOf(user) !== -1) {
                         console.log("transaction is there*************", snap.val().members.indexOf(user));
                         snap.ref.child('transaction').push({transactioObject});
                     }
                 } else {
-                    if(snap.val().members.indexOf(user)!==-1) {
+                    if (snap.val().members.indexOf(user) !== -1) {
                         console.log("transaction is not there");
                         snap.ref.update({transaction: []});
                         snap.ref.child('transaction').push({transactioObject});
@@ -107,45 +107,46 @@ class Expense extends Component {
         return (
             <div className="home">
                 <div className="billGenerator">
-                    <span className="trip-title">Welcome to Trip <label className="trip-name">{this.props.tripInfo}</label></span>
+                    <span className="trip-title">Welcome to Trip <label
+                        className="trip-name">{this.props.tripInfo}</label></span>
                     <h4 className="modal-title register-tag">Spend By:</h4>
-                        <div className="margin-from-top">
-                            <label>Person's email:</label>
-                            <select className="dropdown input-box" onChange={this.onChangeSpendBy.bind(this)}
-                                    value={this.state.spend_by}>
-                                <option value="Select Trip">Select Person's email</option>
-                                {this.state.members.map((item) => (
-                                    <option value={item}>{item}</option>
-                                ))
-                                }
-                                )}
-                            </select>
-                        </div>
+                    <div className="margin-from-top">
+                        <label>Person's email:</label>
+                        <select className="dropdown input-box" onChange={this.onChangeSpendBy.bind(this)}
+                                value={this.state.spend_by}>
+                            <option value="Select Trip">Select Person's email</option>
+                            {this.state.members.map((item) => (
+                                <option value={item}>{item}</option>
+                            ))
+                            }
+                            )}
+                        </select>
+                    </div>
 
-                        <div className="margin-from-top">
-                            <label>Spend on:</label>
-                            <input type="text"
-                                                            className="input-box"
-                                                            value={this.state.title}
-                                                            name="title"
-                                                            placeholder="Title"
-                                                            onChange={this.changeHandler.bind(this)}
-                            />
-                        </div>
+                    <div className="margin-from-top">
+                        <label>Spend on:</label>
+                        <input type="text"
+                               className="input-box"
+                               value={this.state.title}
+                               name="title"
+                               placeholder="Title"
+                               onChange={this.changeHandler.bind(this)}
+                        />
+                    </div>
 
-                        <div className="margin-from-top">
-                            <label>Amount :</label>
-                            <input type="text"
-                                                           className="input-box"
-                                                           value={this.state.amount}
-                                                           name="amount"
-                                                           placeholder="Amount"
-                                                           onChange={this.changeHandler.bind(this)}
-                            />
-                        </div>
-                    <center><button className="submit-btn" onClick={this.onSubmit.bind(this)}>Submit</button></center>
+                    <div className="margin-from-top">
+                        <label>Amount :</label>
+                        <input type="text"
+                               className="input-box"
+                               value={this.state.amount}
+                               name="amount"
+                               placeholder="Amount"
+                               onChange={this.changeHandler.bind(this)}
+                        />
+                    </div>
+                    <div><button className="submit-btn common-btn" onClick={this.onSubmit.bind(this)}>Submit</button></div>
                 </div>
-                <ExpenseTable tripName={this.props.tripInfo} user={this.props.user} />
+                <ExpenseTable tripName={this.props.tripInfo} user={this.props.user}/>
 
             </div>
 

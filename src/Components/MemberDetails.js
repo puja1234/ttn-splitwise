@@ -36,7 +36,7 @@ class MemberDetails extends Component{
                 <input type="text" onChange={this.changeHandler.bind(this)} placeholder="Enter members" value={this.state.memberDetail}/>
                 {this.state.view
                     ?
-                    <button onClick={this.doneHandler.bind(this)}>Done </button>
+                    <button className="common-btn" onClick={this.doneHandler.bind(this)}>Done </button>
                 :
                 ''}
             </div>
