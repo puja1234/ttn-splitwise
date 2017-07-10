@@ -91,7 +91,7 @@ class TripMembers extends Component{
     render(){
         const inputBox = [];
         for(let i=0; i<this.props.memberCount;i++){
-            inputBox.push(<MemberDetails addMember={this.addMember.bind(this)}/>)
+            inputBox.push(<MemberDetails addMember={this.addMember.bind(this)} members={this.state.members}/>)
         }
 
         return(

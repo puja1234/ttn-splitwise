@@ -32,13 +32,16 @@ class GeneratedBill extends Component {
                 billRef.orderByChild('id').equalTo(this.state.tripID).on('child_added',billSnap =>{
                     console.log("~~~~~~~bills are" , billSnap.val());
                     for(let key in billSnap.val().bills){
-                        for( let i =0; i< billSnap.val().bills[key].accounts.length;i++){
-                            if(billSnap.val().bills[key].accounts[i].debitor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending'){
-                                usersDebit.push(billSnap.val().bills[key].accounts[i]);
-                                console.log("~~~~~accounts",billSnap.val().bills[key].accounts[i]);
-                            }else if(billSnap.val().bills[key].accounts[i].creditor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending'){
-                                userdCredit.push(billSnap.val().bills[key].accounts[i]);
-                                console.log("~~~~~accounts",billSnap.val().bills[key].accounts[i]);
+                        if (billSnap.val().bills[key].accounts !== undefined) {
+                            for (let i = 0; i < billSnap.val().bills[key].accounts.length; i++) {
+                                if (billSnap.val().bills[key].accounts[i] === undefined) {
+                                    i++;
+                                }
+                                if (billSnap.val().bills[key].accounts[i].debitor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending') {
+                                    usersDebit.push(billSnap.val().bills[key].accounts[i]);
+                                } else if (billSnap.val().bills[key].accounts[i].creditor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending') {
+                                    userdCredit.push(billSnap.val().bills[key].accounts[i]);
+                                }
                             }
                         }
 
@@ -75,18 +78,17 @@ class GeneratedBill extends Component {
                 billRef.orderByChild('id').equalTo(this.state.tripID).on('child_added',billSnap =>{
                     console.log("~~~~~~~bills are" , billSnap.val());
                     let billsReceived = billSnap.val();
-                    for(let key in billSnap.val().bills){
-                        for( let i =0; i< billSnap.val().bills[key].accounts.length;i++){
-                            if(billSnap.val().bills[key].accounts[i] === undefined){
-                                i++;
-                            }
-                            console.log(billSnap.val().bills[key].accounts[i]);
-                            if(billSnap.val().bills[key].accounts[i].debitor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending'){
-                                usersDebit.push(billSnap.val().bills[key].accounts[i]);
-                                console.log("~~~~~accounts",billSnap.val().bills[key].accounts[i])
-                            }else if(billSnap.val().bills[key].accounts[i].creditor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending'){
-                                userdCredit.push(billSnap.val().bills[key].accounts[i]);
-                                console.log("~~~~~accounts",billSnap.val().bills[key].accounts[i])
+                    for(let key in billSnap.val().bills) {
+                        if (billSnap.val().bills[key].accounts !== undefined) {
+                            for (let i = 0; i < billSnap.val().bills[key].accounts.length; i++) {
+                                if (billSnap.val().bills[key].accounts[i] === undefined) {
+                                    i++;
+                                }
+                                if (billSnap.val().bills[key].accounts[i].debitor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending') {
+                                    usersDebit.push(billSnap.val().bills[key].accounts[i]);
+                                } else if (billSnap.val().bills[key].accounts[i].creditor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending') {
+                                    userdCredit.push(billSnap.val().bills[key].accounts[i]);
+                                }
                             }
                         }
                     }

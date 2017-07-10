@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../App.css';
 
 export default class Edit extends Component {
+
     constructor(props) {
         super(props);
         const {amount, spend_by , title} = props.transInfo;
@@ -28,13 +29,19 @@ export default class Edit extends Component {
         this.props.updateTransaction(this.props.transInfo,this.state)
     };
 
-
     render() {
         return (
             <div >
                 <div >
                     <form className="">
-                        <input type="text" className="form-control" value={this.state.spend_by} onChange={(e) => this.setState({spend_by: e.target.value})}/>&nbsp;
+                        <select onChange={(e) => this.setState({spend_by:e.target.value})}
+                                value={this.state.spend_by}>
+                            {this.props.myMembers.map((item) => (
+                                <option value={item}>{item}</option>
+                            ))
+                            }
+                            )}
+                        </select>
                         <input type="text" className="form-control" value={this.state.title} onChange={(e) => this.setState({title: e.target.value})}/>&nbsp;
                         <input type="text" className="form-control" value={this.state.amount} onChange={(e) => this.setState({amount: e.target.value})}/>&nbsp;
                         <button className="" onClick={this.saveChanges}>Save</button>&nbsp;

@@ -15,10 +15,6 @@ class TransactionTable extends Component {
         })
     }
 
-    deleteTransaction(item){
-
-    }
-
     render(){
 
         let item = this.props.item;
@@ -32,13 +28,13 @@ class TransactionTable extends Component {
                         <td><button className="common-btn">Save</button></td>
                     </tr>:
 
-                       <tr>
-                            <td>{item.spend_by}</td>
-                            <td>{item.title}</td>
-                            <td>{item.amount}</td>
-                            <td><button onClick={this.deleteTransaction.bind(this,item)}>Delete</button></td>
-                        </tr>
-                }
+                    <tr>
+                        <td>{item.spend_by}</td>
+                        <td>{item.title}</td>
+                        <td>{item.amount}</td>
+                        <td><button onClick={this.deleteTransaction.bind(this,item)}>Delete</button></td>
+                    </tr>
+            }
             </div>
         )
     }

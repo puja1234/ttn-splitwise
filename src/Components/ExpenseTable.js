@@ -10,7 +10,8 @@ class ExpenseTable extends Component {
         this.state={
            trans:'',
             trans2:'',
-            edit:false
+            edit:false,
+            myMembers:'',
         }
     }
 
@@ -29,7 +30,8 @@ class ExpenseTable extends Component {
                         if (this.state.trans[key].members.indexOf(this.props.user) !== -1) {
                             console.log("has property :", this.state.trans[key].transaction);
                             this.setState({
-                                trans2: this.state.trans[key].transaction
+                                trans2: this.state.trans[key].transaction,
+                                myMembers : this.state.trans[key].members
                             }, () => {
                                 console.log("inside table component :", this.state.trans2)
 
@@ -60,7 +62,8 @@ class ExpenseTable extends Component {
                             localKey = snap.key;
                             console.log("has property :", this.state.trans[key].transaction);
                             this.setState({
-                                trans2: this.state.trans[key].transaction
+                                trans2: this.state.trans[key].transaction,
+                                myMembers : this.state.trans[key].members
                             }, () => {
                                 console.log("inside table component :", this.state.trans2)
 
@@ -156,7 +159,7 @@ class ExpenseTable extends Component {
                                             <td>{item.amount}</td>
                                         </tr> :
                                         this.state.edit ?
-                                            <Edit transInfo = {item} updateTransaction ={this.updateTransaction.bind(this)}/> :
+                                            <Edit transInfo = {item} myMembers={this.state.myMembers} updateTransaction ={this.updateTransaction.bind(this)}/> :
                                         <tr>
                                             <td>{item.spend_by}</td>
                                             <td>{item.title}</td>

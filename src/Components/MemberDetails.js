@@ -22,10 +22,17 @@ class MemberDetails extends Component{
     doneHandler(){
         if(this.state.memberDetail.length===0){
             alert("Member name cannot be empty!!!")
-        }else{
+        }else if(this.props.members.indexOf(this.state.memberDetail) <0 ) {
+            alert("Member already exist");
+            this.setState({
+                memberDetail:''
+            })
+        }
+        else
+        {
             this.props.addMember(this.state.memberDetail);
             this.setState({
-                view:false
+                view: false
             })
         }
     }
