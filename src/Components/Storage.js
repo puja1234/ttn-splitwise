@@ -153,7 +153,49 @@ class Storage extends Component{
 
     };
 
+    /*onImgDeleted = () => {
+     if(this.props.trip == ''){
+     alert('Please select a trip to delete images..');
+     }
+     else {
+     /!*let imageUrlArray = [];
+     imageUrlArray = this.state.localArray;*!/
+     alert('image selection complete...!');
+     /!*for(let i=0; i<imageUrlArray.length; i++) {*!/
+     this.setState({
+     imageUrlDelete: this.state.localArray
+     }, () => {
+     let imgDeletearray = [];
+     imgDeletearray = this.state.imageUrlDelete;
+     for(let i =0 ; i< imgDeletearray.length; i++){
+     console.log('image link for delete----',imgDeletearray[i]);
+     var deleteUrl = imgDeletearray[i].substring(imgDeletearray[i].lastIndexOf("/o/")+3,imgDeletearray[i].lastIndexOf("?"));
+     var decodedURL = decodeURIComponent(deleteUrl);
+     let storageRef = firebase.storage().ref(decodedURL);
+     storageRef.delete().then(function(){
+     alert('image deleted...');
+     }).catch(function(error){
+     console.log('error occured while deleting images',error);
+     })
+     let imgPostedBy=this.props.user;
+     let currentTrip = this.props.trip;
+     let rootRef = firebase.database().ref().child('trip');
+     rootRef.orderByChild("tripName").equalTo(currentTrip).on('child_added', function (snapshot) {
+     if (snapshot.val().hasOwnProperty('imageFiles')) {
+     console.log('snapshot.val()@@@@@@@@@@2',snapshot.val());
+     if (snapshot.val().members.indexOf(imgPostedBy) !== -1) {
+     console.log("imageURL is there*************", snapshot.val().members.indexOf(imgPostedBy));
+     /!*snapshot.ref.child('imageFiles').remove({deleteUrl});*!/
+     }
+     }
+     });
+     }
+     })
+     }
+     }*/
+
     render(){
+        console.log('this.props in storage component',this.props);
         let imagesArray = this.state.imageUrl;
         //console.log("this.props.myimages @Storage161.....", this.props.myImages);
         return(
@@ -181,6 +223,14 @@ class Storage extends Component{
 
                     <button className="common-btn download-btn" onClick={this.onImgDownload.bind(this)}>Download images</button>
 
+
+{/*
+                    <button className="signoutButton download-btn" onClick={this.onImgDeleted.bind(this)}>Delete images</button>
+*/}
+
+
+                    {/*can't provide height and width as there are no
+                    file metadata properties that allows us to do so in firebase storage*/}
                     <div className="storage-downloads">
                         {
                             imagesArray.map((item)=>(

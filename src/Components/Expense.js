@@ -103,7 +103,19 @@ class Expense extends Component {
     }
 
     render() {
+        console.log('this.props in expense--------',this.props);
         console.log('>>>>>>>>>', this.props.tripInfo);
+        let opts;
+        if(this.state.members && this.state.members.length){
+            opts=this.state.members.map((item) => (
+                    <option value={item}>{item}</option>
+                )
+            );
+        } else{
+            opts=[];
+        }
+
+
         return (
             <div className="home">
                 <div className="billGenerator">
@@ -115,11 +127,8 @@ class Expense extends Component {
                         <select className="dropdown input-box" onChange={this.onChangeSpendBy.bind(this)}
                                 value={this.state.spend_by}>
                             <option value="Select Trip">Select Person's email</option>
-                            {this.state.members.map((item) => (
-                                <option value={item}>{item}</option>
-                            ))
-                            }
-                            )}
+                            {opts}
+
                         </select>
                     </div>
 

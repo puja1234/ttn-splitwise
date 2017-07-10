@@ -343,3 +343,11 @@ progress {
   width: 40%;
   display: block;
 }
+
+.storage-div{
+  width: 1000px;
+  float: right;
+  border: 3px solid lightgray;
+  margin: 5px;
+  padding: 5px;
+}

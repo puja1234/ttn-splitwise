@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import '../App.css';
 import TripMembers from './TripMembers'
 import * as firebase from 'firebase'
+import HomePage from './HomePage'
 import Expense from './Expense'
 import Bill from './Bill'
 import Storage from './Storage'
 import OriginalMembers from './OriginalMembers'
-import { BrowserRouter as Router, Route ,Link} from 'react-router-dom'
+import ViewGallery from './ViewGallery'
+import ViewExpense from './ViewExpense'
+import { BrowserRouter as Router, Route ,Link, Redirect} from 'react-router-dom'
 
 class Home extends Component {
     constructor(){
@@ -19,6 +22,7 @@ class Home extends Component {
             tripInfo:'',
             members:[],
             viewExpense:false,
+            viewGallery:false,
             myImages:[],
             displayStorage:false,
             showMembers : false,
@@ -55,6 +59,7 @@ class Home extends Component {
 
     logOut(){
         firebase.auth().signOut();
+        window.location.href='/'; //also tried <Redirect to='/'/> , but nothig happened.
     }
 
     onChangeHandler(event){
@@ -71,19 +76,26 @@ class Home extends Component {
         let imageArray = [];
         let that = this;
         let tripMembers = 0;
+        let flag = 0;
         let updateImageState = function(){
             that.setState({
                 myImages: imageArray,
                 displayStorage:true
+            },() => {
+                flag = 1;
+                console.log('value of flag----',flag);
             });
         };
 
         if(event.target.value === 'Select Trip'){
             alert("this cannot be a trip")
         }else {
+            let url = window.location.href;
+            let addressUrl = url.substr(url.lastIndexOf('/'));
             this.setState({
                 trip: event.target.value
             }, () => {
+
                 this.state.myTrips.map((item)=>{
                     if(item.tripName === this.state.trip){
                         this.setState({
@@ -117,13 +129,71 @@ class Home extends Component {
 
                     }
                     updateImageState();
-                });
 
+                });
+                console.log('trip---',this.state.trip);
+               /* if(flag == 1){
+                    let storageData = {
+                        trip: this.state.trip,
+                        myImages: this.state.myImages
+                    }
+                    /!*let expenseData = {
+                        trip: this.state.trip
+                    }*!/
+                    console.log('data being send to app.js from home',storageData);
+                    this.props.fetchData(storageData);
+                    //this.props.fetchStorageData(storageData);
+                    /!*this.props.fetchExpenseData(expenseData)*!/
+                    flag = 0;
+                }*/
+                /*if( addressUrl == '/gallery'){
+                    console.log('**********************url',addressUrl);
+                    return <ViewGallery/>
+                }
+                else if( addressUrl == '/myExpense'){
+                    console.log('**********************url',addressUrl);
+                    return <Expense/>
+                }
+                else{
+                    console.log('**********************url',addressUrl);
+                    return <HomePage/>
+                }*/
 
             })
+
         }
 
     }
+
+    /*viewGallery = () => {
+        this.setState({
+            viewExpense:false,
+            viewGallery: true
+        },() => {
+            let storageData = {
+                trip: this.state.trip,
+                tripImages: this.state.myImages
+            }
+            console.log('data being send to app.js from home',storageData);
+            this.props.fetchStorageData(storageData);
+        })
+    }*/
+
+    /*viewGallery = () => {
+        let url = window.location.href;
+        let addressUrl = url.substr(url.lastIndexOf('/'));
+        console.log('%%%%%',addressUrl);
+
+    }*/
+
+    /*viewGallery = () => {
+        let storageData = {
+            trip:this.state.trip,
+            myImages: this.state.myImages
+        }
+        this.props.fetchData(storageData);
+
+    }*/
 
     clearState(){
         this.setState({
@@ -206,13 +276,15 @@ class Home extends Component {
                     <img className="userImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC4Ammc_cwp2lqbkJQzf9r3NaiwdaVqjgka1B56cQuxqrA4D4b" alt="hehe"/>
                     <button className="signoutButton"
                             onClick={this.logOut.bind(this)}>LogOut</button>
-                    <a className="links" href='/home/gallery'> View Gallery </a>
-                    <a className="links" href='/home/myExpense'> View Expense </a>
+
+                    <a className="links" href='/'> View Home </a>
+                    <a className="links" href='/gallery' > View Gallery </a>
+                    <a className="links" href='/myExpense'> View Expense </a>
                 </div>
 
                 <div className="navContainer">
                     <div>
-                        <center><img className="friendsImage" src={this.props.photo}  /></center>
+                        <center><img className="friendsImage" src={this.props.photo} /></center>
                         <div className="myEmail color-green-text"><label>{this.props.user}</label></div>
                     </div>
                     <div className="searchingAdding">
@@ -313,22 +385,38 @@ class Home extends Component {
                             <option value={item.tripName}>{item.tripName}</option>
                         ))}
                     </select>
-                    {
+                   {/*{
                         this.state.displayStorage ?
                             <Storage trip={this.state.trip}
                                      user={this.props.user}
                                      myImages={this.state.myImages}/>
                             :
                             ''
-                    }
+                    }*/}
 
 
                 </div>
-                {this.state.viewExpense ?
+                <Router>
+                    <div>
+                        <Route exact path="/" render={props => (<HomePage {...props}
+                                                                    trip={this.state.trip}
+                                                                    user={this.props.user}/>)}/>
+
+                        <Route exact path="/gallery" render={props => (<ViewGallery {...props}
+                                                                              trip={this.state.trip}
+                                                                              user={this.props.user}
+                                                                              myImages={this.state.myImages}/>)}/>
+                        <Route exact path="/myExpense" render={props => (<ViewExpense {...props}
+                                                                            tripInfo={this.state.trip}
+                                                                            user={this.props.user}/>)}/>
+                    </div>
+                </Router>
+
+               {/*{this.state.viewExpense ?
                     <div>
                         <Expense tripInfo={this.state.trip}  user={this.props.user}/>
                         <Bill tripName={this.state.trip} user={this.props.user}/>
-                    </div>:''}
+                    </div>:''}*/}
             </div>
         );
     }
