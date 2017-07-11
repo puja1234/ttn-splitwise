@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../App.css';
 import MemberDetails from './MemberDetails'
 import * as firebase from 'firebase'
+import moment from 'moment'
 
 class TripMembers extends Component{
     constructor(){
@@ -36,11 +37,14 @@ class TripMembers extends Component{
         let localMembers;
         let that = this;
 
-        if(this.props.trip === '' || this.props.memberCount === ''){
+        if(this.props.trip === '' || this.props.memberCount === '' || this.state.members.length === 0 ){
             alert('trip cannot be empty');
-
+        }
+        else if(this.state.members.length!== this.props.memberCount){
+            alert('trip members and added number of members are not equal')
         }
         else{
+            console.log("!!!!!!!trip members",this.state.members.length,this.state.members,this.props.memberCount)
             if(this.props.hasoriginalMembers){
                 console.log("+++++++++++++you have to append new members to original members+++++++++++++ ");
                 rootRef.orderByChild('tripName').equalTo(this.props.trip).once('value',snap => {
@@ -63,13 +67,13 @@ class TripMembers extends Component{
 
 
             }else {
-                var myRef = rootRef.push();
-                var key = myRef.key;
+                let myRef = rootRef.push();
+                let key = myRef.key;
 
                 myRef.set({
                     tripName: this.props.trip,
                     members: this.state.members,
-                    createdAt: Date.now(),
+                    createdAt: moment().format(),
                     createdBy: this.props.user,
                     transactions: []
                 });

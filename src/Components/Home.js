@@ -31,6 +31,7 @@ class Home extends Component {
             showInput : false
         };
         this.clearState = this.clearState.bind(this);
+        this.onChangeHandler = this.onChangeHandler.bind(this);
     }
 
     componentDidMount(){
@@ -62,14 +63,29 @@ class Home extends Component {
         window.location.href='/'; //also tried <Redirect to='/'/> , but nothig happened.
     }
 
-    onChangeHandler(event){
-        this.setState({
-            displayStorage:false,
-            showMembers:false,
-            viewExpense:false,
-            deleteMembers : false,
-            [event.target.name]: event.target.value
-        });
+    onChangeHandler(event, key){
+        if(key === 'memberCount'){
+            let regex = /^[0-9]{1,10}$/;
+            if(regex.test(event.target.value)===false && event.target.value !== ''){
+                alert("Member count can only be number")
+            }else{
+                this.setState({
+                    displayStorage:false,
+                    showMembers:false,
+                    viewExpense:false,
+                    deleteMembers : false,
+                    [event.target.name]: event.target.value
+                });
+            }
+        }else{
+            this.setState({
+                displayStorage:false,
+                showMembers:false,
+                viewExpense:false,
+                deleteMembers : false,
+                [event.target.name]: event.target.value
+            });
+        }
     }
 
     onChangeCategory(event){
@@ -131,69 +147,9 @@ class Home extends Component {
                     updateImageState();
 
                 });
-                console.log('trip---',this.state.trip);
-               /* if(flag == 1){
-                    let storageData = {
-                        trip: this.state.trip,
-                        myImages: this.state.myImages
-                    }
-                    /!*let expenseData = {
-                        trip: this.state.trip
-                    }*!/
-                    console.log('data being send to app.js from home',storageData);
-                    this.props.fetchData(storageData);
-                    //this.props.fetchStorageData(storageData);
-                    /!*this.props.fetchExpenseData(expenseData)*!/
-                    flag = 0;
-                }*/
-                /*if( addressUrl == '/gallery'){
-                    console.log('**********************url',addressUrl);
-                    return <ViewGallery/>
-                }
-                else if( addressUrl == '/myExpense'){
-                    console.log('**********************url',addressUrl);
-                    return <Expense/>
-                }
-                else{
-                    console.log('**********************url',addressUrl);
-                    return <HomePage/>
-                }*/
-
             })
-
         }
-
     }
-
-    /*viewGallery = () => {
-        this.setState({
-            viewExpense:false,
-            viewGallery: true
-        },() => {
-            let storageData = {
-                trip: this.state.trip,
-                tripImages: this.state.myImages
-            }
-            console.log('data being send to app.js from home',storageData);
-            this.props.fetchStorageData(storageData);
-        })
-    }*/
-
-    /*viewGallery = () => {
-        let url = window.location.href;
-        let addressUrl = url.substr(url.lastIndexOf('/'));
-        console.log('%%%%%',addressUrl);
-
-    }*/
-
-    /*viewGallery = () => {
-        let storageData = {
-            trip:this.state.trip,
-            myImages: this.state.myImages
-        }
-        this.props.fetchData(storageData);
-
-    }*/
 
     clearState(){
         this.setState({
@@ -203,10 +159,15 @@ class Home extends Component {
     }
 
     editMembers(event){
-        this.setState({
-            localMembers : event.target.value,
-            showInput :true
-        })
+        let regex = /^[0-9]{1,10}$/;
+        if(regex.test(event.target.value)===false && event.target.value !== ''){
+            alert("Member count can only be number")
+        }else {
+            this.setState({
+                localMembers: event.target.value,
+                showInput: true
+            })
+        }
     }
 
     editMembersDone(){
@@ -277,9 +238,10 @@ class Home extends Component {
                     <button className="signoutButton"
                             onClick={this.logOut.bind(this)}>LogOut</button>
 
-                    <a className="links" href='/'> View Home </a>
-                    <a className="links" href='/gallery' > View Gallery </a>
-                    <a className="links" href='/myExpense'> View Expense </a>
+                    <a className="links" href='/myExpense'>My Expense </a>
+                    <a className="links" href='/'>My Home </a>
+                    <a className="links" href='/gallery' >My Gallery </a>
+
                 </div>
 
                 <div className="navContainer">
@@ -320,7 +282,7 @@ class Home extends Component {
                                                        type="text"
                                                        placeholder="Enter number of members"
                                                        name="memberCount"
-                                                       onChange={this.onChangeHandler.bind(this)}
+                                                       onChange={(e) => this.onChangeHandler(e,"memberCount")}
                                                        value={this.state.memberCount}/>
                                                 < TripMembers
                                                     memberCount={this.state.memberCount}
@@ -385,19 +347,10 @@ class Home extends Component {
                             <option value={item.tripName}>{item.tripName}</option>
                         ))}
                     </select>
-                   {/*{
-                        this.state.displayStorage ?
-                            <Storage trip={this.state.trip}
-                                     user={this.props.user}
-                                     myImages={this.state.myImages}/>
-                            :
-                            ''
-                    }*/}
-
 
                 </div>
                 <Router>
-                    <div>
+                    <div className="home-content-wrapper">
                         <Route exact path="/" render={props => (<HomePage {...props}
                                                                     trip={this.state.trip}
                                                                     user={this.props.user}/>)}/>
@@ -412,11 +365,6 @@ class Home extends Component {
                     </div>
                 </Router>
 
-               {/*{this.state.viewExpense ?
-                    <div>
-                        <Expense tripInfo={this.state.trip}  user={this.props.user}/>
-                        <Bill tripName={this.state.trip} user={this.props.user}/>
-                    </div>:''}*/}
             </div>
         );
     }

@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import '../App.css';
 import Storage from './Storage'
+import photoGallery from '../Images/photoGallery2.jpg'
 
 class ViewGallery extends Component{
     constructor(props){
@@ -14,7 +15,7 @@ class ViewGallery extends Component{
         console.log('props in gallery!!!!!!!!!!!!!!!!!',this.props);
         let template;
         if(this.props.trip == '' && this.props.myImages == ''){
-            template = (<div>no trip is selected</div>)
+            template = (<div className="no-trip-selected"><img src={photoGallery} alt="Gallery Img"/></div>)
         }
         else{
             template = (<div className='storage-div'>

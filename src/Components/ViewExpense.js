@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import '../App.css';
 import Expense from './Expense'
+import expense from '../Images/expenses.jpg'
 
 class ViewExpense extends Component{
     constructor(props){
@@ -14,7 +15,7 @@ class ViewExpense extends Component{
         console.log('props in view expense----',this.props.tripInfo && this.props);
         let template;
         if(this.props.tripInfo == ''){
-            template = (<div>no trip is selected</div>)
+            template = (<div className="no-trip-selected"><img src={expense} alt="Expense Img"/></div>)
         }
         else{
             template = (<div>

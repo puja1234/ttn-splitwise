@@ -136,7 +136,7 @@ img.avatar {
 
 .home{
   float: left;
-  width: 796px;
+  width: 725px;
   height: 522px;
   border: 3px solid lightgrey;
 }
@@ -286,7 +286,36 @@ th {
   overflow: auto;
 }
 
+.no-trip-selected img{
+  width: 100%;
+  height: 283px;
+}
+.home-content-wrapper {
+  width: 75%;
+  display: inline-block;
+  border: 3px solid lightgray;
+  padding: 18px;
+}
+
+.no-trip img {
+  width: 20%;
+}
+
+.no-trip h4, .no-trip span {
+  text-decoration: underline;
+  color: #02909A;
+}
+
+.no-trip p {
+  color: #28B472;
+}
+.no-trip-selected img{
+  width: 100%;
+  height: 283px;
+}
+
 .common-btn {
+  margin: 2px;
   background-color: #1ABC9C;
   border: none;
   padding: 10px;

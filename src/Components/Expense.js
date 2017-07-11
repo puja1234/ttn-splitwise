@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import '../App.css';
 import ExpenseTable from './ExpenseTable'
 import * as firebase from 'firebase'
+import moment from 'moment'
 
 class Expense extends Component {
     constructor() {
@@ -70,7 +71,8 @@ class Expense extends Component {
                 spend_by: this.state.spend_by,
                 amount: this.state.amount,
                 title: this.state.title,
-                generatedBill: false
+                generatedBill: false,
+                createdAt:moment().format()
             };
             rootRef.orderByChild("tripName").equalTo(trip).on('child_added', function (snap) {
                 console.log("^^^^^^^^^^^^^^^^^", transactioObject)

@@ -1,10 +1,10 @@
-/**
- * Created by saubhagya on 9/7/17.
- */
+
 import React, { Component } from 'react';
 import '../App.css';
 import Expense from './Expense'
 import Bill from './Bill'
+import AboutUs from './AboutUs'
+
 
 class HomePage extends Component{
     constructor(props){
@@ -15,7 +15,7 @@ class HomePage extends Component{
         console.log('this.props in HOmePage.js',this.props);
         let template;
         if(this.props.trip == ''){
-            template = (<div>No trip selected yet</div>)
+            template = (<AboutUs/>)
         }
         else{
             template = (

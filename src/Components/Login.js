@@ -18,7 +18,7 @@ class Login extends Component {
         this.setState({
             [event.target.name]:event.target.value
         })
-    }
+    };
 
     login =() => {
         if(this.state.password === '' || this.state.email === ''){
@@ -33,7 +33,7 @@ class Login extends Component {
                 })
             })
         }
-    }
+    };
 
     signIn = () => {
         this.setState({
@@ -46,26 +46,8 @@ class Login extends Component {
          const promise = firebase.auth().signInWithRedirect(provider);
          promise.catch(e =>{
              console.log(e.message)
-         })/*.then(function(result) {
-            console.log("user :",result)
-        }).catch(function (error) {
-            console.log(error);
-        });*/
-
-       /* firebase.auth().onAuthStateChanged(User => {
-            if(User){
-                this.setState({
-                    user:User,
-                  photo:User.providerData[0].photoURL
-                });
-            }else{
-                this.setState({
-                    user:''
-                })
-            }
-        })*/
-
-    }
+         })
+    };
 
     render() {
         return (

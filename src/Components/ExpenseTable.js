@@ -134,8 +134,44 @@ class ExpenseTable extends Component {
         for (let key in this.state.trans2) {
             if (this.state.trans2.hasOwnProperty(key) ) {
                 expenditures.push(this.state.trans2[key].transactioObject);
-            }
+                }
         }
+        let expensesData = expenditures.map((item)=> {
+            if(item.trip === this.props.tripTo) {
+                if (item.generatedBill) {
+                    return (
+                        <tr>
+                            <td>{item.spend_by}</td>
+                            <td>{item.title}</td>
+                            <td>{item.amount}</td>
+                            <td>{item.createdAt.slice(0, item.createdAt.indexOf('T'))}</td>
+                        </tr>
+                    );
+                } else {
+                    if (this.state.edit) {
+                        return (
+                            <Edit transInfo={item} myMembers={this.state.myMembers}
+                                  updateTransaction={this.updateTransaction.bind(this)}/>
+                        )
+
+                    } else {
+                        return(
+                            <tr>
+                                <td>{item.spend_by}</td>
+                                <td>{item.title}</td>
+                                <td>{item.amount}</td>
+                                <td>{item.createdAt.slice(0, item.createdAt.indexOf('T'))}</td>
+                                <td>
+                                    <button className="common-btn" onClick={this.deleteTransaction.bind(this, item)}>Delete</button>
+
+                                    <button className="common-btn" onClick={this.editTransaction.bind(this, item)}>Edit</button>
+                                </td>
+                            </tr>
+                        )
+                    }
+                }
+            }
+        });
 
         return (
             <div className="expense">
@@ -145,35 +181,13 @@ class ExpenseTable extends Component {
                             <th>Expense By</th>
                             <th>Item</th>
                             <th>Amount</th>
+                            <th>Date</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
-
-                    {expenditures.map((item)=> {
-                        if(item.trip === this.props.tripTo){
-                            return(
-                                <div >{
-                                    item.generatedBill ?
-                                        <tr>
-                                            <td>{item.spend_by}</td>
-                                            <td>{item.title}</td>
-                                            <td>{item.amount}</td>
-                                        </tr> :
-                                        this.state.edit ?
-                                            <Edit transInfo = {item} myMembers={this.state.myMembers} updateTransaction ={this.updateTransaction.bind(this)}/> :
-                                        <tr>
-                                            <td>{item.spend_by}</td>
-                                            <td>{item.title}</td>
-                                            <td>{item.amount}</td>
-                                            <td><button className="common-btn" onClick={this.deleteTransaction.bind(this,item)}>Delete</button></td>
-                                            <td><button className="common-btn" onClick={this.editTransaction.bind(this,item)}>Edit</button></td>
-                                        </tr>
-                                    }
-                                </div>
-                            )
-
-                        }
-                    })
-                    }
+                    <tbody>
+                    {expensesData}
+                    </tbody>
                 </table>
             </div>
         );
