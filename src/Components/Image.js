@@ -7,8 +7,6 @@ class Image extends Component {
 
         this.state = {
             checked:false,
-            checkedArray:[],
-            localArray:[],
             ImageUrl:''
         }
     }
@@ -32,7 +30,7 @@ class Image extends Component {
             })
         }
 
-    }
+    };
 
     render(){
         //console.log('this.props in image component---------------',this.props);
