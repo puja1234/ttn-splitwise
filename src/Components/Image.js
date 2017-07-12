@@ -35,11 +35,15 @@ class Image extends Component {
     render(){
         //console.log('this.props in image component---------------',this.props);
         return(
-            <div>
+            <div className="image-wrapper">
                 <div>
-                    <input type="checkbox" className="image-checkbox"
-                           value={this.state.checked} onClick={this.onCheckboxClick.bind(this)} />
-                    <img className="image-urls" alt="trip image" src={this.props.source}/>
+                    <div>
+                        <input type="checkbox" className="image-checkbox"
+                               value={this.state.checked} onClick={this.onCheckboxClick.bind(this)} />
+                    </div>
+                    <div>
+                        <img className="image-urls" alt="trip image" src={this.props.source}/>
+                    </div>
                 </div>
             </div>
         );

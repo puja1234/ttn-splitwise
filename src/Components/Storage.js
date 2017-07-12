@@ -185,11 +185,11 @@ class Storage extends Component{
 
                 <div className="download-div">
                     Download images:-
-                    <ul className="image-render">
+                    <div className="image-render">
                         {this.props.myImages.map((item)=>(
-                            <li><Image source={item} imageSelector={this.onSelectImage.bind(this)}/></li>
+                            <Image source={item} imageSelector={this.onSelectImage.bind(this)}/>
                         ))}
-                    </ul>
+                    </div>
 
                     <button className="common-btn download-btn" onClick={this.onImgDownload.bind(this)}>Download images</button>
 

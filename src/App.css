@@ -250,6 +250,7 @@ th {
 }
 
 .download-div > button {
+  width: 200px;
   margin-top:5px;
 }
 
@@ -260,12 +261,18 @@ th {
   overflow: auto;
 }
 
-.image-render>li {
-  list-style-type: none;
+.image-render>div {
+  display: inline-block;
+  max-width: 250px;
+  max-height: 250px;
+  min-width: 250px;
+  min-height: 250px;
+  overflow: hidden;
+  padding: 3px;
 }
 
 .image-urls{
-  width:20%;
+  width:100%;
 }
 
 .image-link{
@@ -371,6 +378,10 @@ progress {
   margin-top: 10px;
   width: 40%;
   display: block;
+}
+
+.image-wrapper{
+
 }
 
 .storage-div{
