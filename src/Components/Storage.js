@@ -1,6 +1,4 @@
-/**
- * Created by saubhagya on 3/7/17.
- */
+
 import React, { Component } from 'react';
 import '../App.css';
 import TripMembers from './TripMembers'
@@ -10,80 +8,60 @@ import Image from './Image'
 class Storage extends Component{
     constructor(){
         super();
-
         this.state = {
             imageUploader:'',
             imageFile:'',
             selectedImageUrl:'',
             localArray:[],
             imageUrl:[],
-            /*myImages:[],*/
             linkDisplay:false
         }
     }
 
     onImageUploaderChange = (event) => {
-
-        let newImgAdded = '';
+        let that = this;
+        console.log("image uploader",event.target.value);
         if(this.props.trip == ''){
             alert('please select a trip...');
         }
         else{
-            let imgPostedBy=this.props.user;
-            let currentTrip = this.props.trip;
-
             let file = event.target.files[0];
-
-            //to upload image for a particular trip...
-            //if we want store all images together, just remove this,state.trip from the statement below.
-
             let storageRef = firebase.storage().ref('AppGallery/'+this.props.user+
                 '/'+this.props.trip+
                 '/'+file.name);
             let task = storageRef.put(file);
-            // console.log("task that stores storage ref-----",task);
             task.on('state_changed',(snapshot) => {
                     let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                     this.setState({
                         imageFile: file,
                         imageUploader: percentage
                     });
-                },function(error){
-                    console.log('error occuring during state changed',error);
+                },(error) =>{
+                    alert('error occuring during state changed',error);
                 },
-                function() {
-                    let downloadURL = task.snapshot.downloadURL;
-                    console.log('downloadURL+++++', downloadURL);
-
-                    let imageURL = downloadURL;
-                    //console.log('task.fullpath=======',downloadURL);
-                    let rootRef = firebase.database().ref().child('trip');
-                    rootRef.orderByChild("tripName").equalTo(currentTrip).on('child_added', function (snapshot) {
+                () => {
+                    let imageURL = task.snapshot.downloadURL;
+                    let rootRef = firebase.database().ref('trip/'+that.props.tripId);
+                    rootRef.once('value',snapshot => {
                         if (snapshot.val().hasOwnProperty('imageFiles')) {
-                            if (snapshot.val().members.indexOf(imgPostedBy) !== -1) {
-                                //  console.log("imageURL is there*************", snapshot.val().members.indexOf(imgPostedBy));
-                                snapshot.ref.child('imageFiles').push({imageURL});
-                            }
+                            snapshot.ref.child('imageFiles').push({imageURL});
+                            that.setState({
+                                imageFile: '',
+                                imageUploader: ''
+                            })
                         } else {
-                            if (snapshot.val().members.indexOf(imgPostedBy) !== -1) {
-                                //   console.log("imageURL is not there");
-                                snapshot.ref.update({imageFiles: []});
-                                snapshot.ref.child('imageFiles').push({imageURL});
-                            }
+                            snapshot.ref.update({imageFiles: []});
+                            snapshot.ref.child('imageFiles').push({imageURL});
+                            that.setState({
+                                imageFile: '',
+                            });
                         }
+                        that.refs.uploader.value = '';
                     });
-                    //newImgAdded = imageURL;
                 }
             );
-            /* this.setState({
-             localArray: this.state.localArray.concat([newImgAdded])
-             }, () => {
-             console.log('after adding new url---',this.state.localArray);
-             })*/
-
         }
-
-    }
+    };
 
     onSelectImage = (url) => {
         let imageUrlArray = [];
@@ -103,8 +81,6 @@ class Storage extends Component{
                 imageUrlArray.push(this.state.selectedImageUrl);
                 this.setState({
                     localArray: imageUrlArray
-                },function(){
-                    //console.log('localArray',this.state.localArray);
                 })
             });
         }
@@ -112,7 +88,7 @@ class Storage extends Component{
             flag = 0;
         }
 
-    }
+    };
 
     onImgDownload = () => {
 
@@ -120,14 +96,11 @@ class Storage extends Component{
             alert('Please select a trip to download images..');
         }
         else{
-            /*let imageUrlArray = [];
-             imageUrlArray = this.state.localArray;*/
             alert('image selection for download complete...!');
-            /*for(let i=0; i<imageUrlArray.length; i++) {*/
             this.setState({
                 imageUrl: this.state.localArray,
                 linkDisplay:true
-            })
+            });
             //}
             //when you have multiple images and we were recieving image names instead of urls in array below.....
             /*let imageUrlArray = this.state.localArray;
@@ -205,6 +178,7 @@ class Storage extends Component{
                                             name=""
                                             accept="image/*"
                                             id="fileButton"
+                                            ref="uploader"
                                             onChange={this.onImageUploaderChange.bind(this)}/>
 
                     <progress value={this.state.imageUploader}
@@ -223,10 +197,6 @@ class Storage extends Component{
 
                     <button className="common-btn download-btn" onClick={this.onImgDownload.bind(this)}>Download images</button>
 
-
-{/*
-                    <button className="signoutButton download-btn" onClick={this.onImgDeleted.bind(this)}>Delete images</button>
-*/}
 
 
                     {/*can't provide height and width as there are no
@@ -249,21 +219,3 @@ class Storage extends Component{
 
 export default Storage;
 
-/*
- {imagesArray.map(function(url){
- <a href={url}>image link</a>
- })}
-
-
- {
- Object.keys(imagesArray).map(function(key) {
- <a href={key}>image link</a>
- })
- }
-
- <div className="storage-downloads">
- <img src={this.state.imageUrl}
- alt="downloaded-image"/>
- </div>
-
- */

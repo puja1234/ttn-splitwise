@@ -20,8 +20,8 @@ class HomePage extends Component{
         else{
             template = (
                 <div>
-                    <Expense tripInfo={this.props.trip}  user={this.props.user}/>
-                    <Bill tripName={this.props.trip} user={this.props.user}/>
+                    <Expense tripInfo={this.props.trip}  user={this.props.user} tripId={this.props.tripId}/>
+                    <Bill tripName={this.props.trip} user={this.props.user} tripId={this.props.tripId}/>
                 </div>
             )
         }

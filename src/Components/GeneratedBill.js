@@ -6,14 +6,38 @@ class GeneratedBill extends Component {
     constructor(){
         super();
         this.state = {
-            tripID:'',
             trans:'',
             debitor:[],
             creditor:[]
         }
     }
     componentDidMount(){
-        let tripName = this.props.tripName;
+        let usersDebit =[] , userdCredit =[];
+        let billRef  = firebase.database().ref().child('bill');
+        billRef.orderByChild('id').equalTo(this.props.tripId).on('child_added',billSnap =>{
+            for(let key in billSnap.val().bills){
+                if (billSnap.val().bills[key].accounts !== undefined) {
+                    for (let i = 0; i < billSnap.val().bills[key].accounts.length; i++) {
+                        if (billSnap.val().bills[key].accounts[i] === undefined) {
+                            i++;
+                        }
+                        if (billSnap.val().bills[key].accounts[i].debitor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending') {
+                            usersDebit.push(billSnap.val().bills[key].accounts[i]);
+                        } else if (billSnap.val().bills[key].accounts[i].creditor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending') {
+                            userdCredit.push(billSnap.val().bills[key].accounts[i]);
+                        }
+                    }
+                }
+            }
+
+            this.setState({
+                debitor:usersDebit,
+                creditor:userdCredit
+            },()=>{
+                console.log("**********",this.state.debitor,this.state.creditor)
+            })
+        });
+       /* let tripName = this.props.tripName;
         let usersDebit =[] , userdCredit =[]
         console.log("``````trip name is :",tripName);
         let rootRef = firebase.database().ref().child('trip');
@@ -54,54 +78,36 @@ class GeneratedBill extends Component {
                     })
                 })
             }
-        });
+        });*/
 
     }
 
     componentWillReceiveProps(){
-        let tripName = this.props.tripName;
         let usersDebit =[] , userdCredit =[];
-        let rootRef = firebase.database().ref().child('trip');
-        rootRef.orderByChild("tripName").equalTo(tripName).on('child_added', snap => {
-            console.log("~~~~~~~~",snap)
-            if(snap.val().members.indexOf(this.props.user) !== -1){ // run single time
-                console.log("my trip is~~~~~~~~~~~~~",snap.val(),"__________",snap.key);
-                this.setState({
-                    tripID:snap.key
-                },()=>{
-                    console.log("~trip id is :",this.state.tripID)
-                });
-
-                // search bill table with this trip id
-
-                let billRef  = firebase.database().ref().child('bill');
-                billRef.orderByChild('id').equalTo(this.state.tripID).on('child_added',billSnap =>{
-                    console.log("~~~~~~~bills are" , billSnap.val());
-                    let billsReceived = billSnap.val();
-                    for(let key in billSnap.val().bills) {
-                        if (billSnap.val().bills[key].accounts !== undefined) {
-                            for (let i = 0; i < billSnap.val().bills[key].accounts.length; i++) {
-                                if (billSnap.val().bills[key].accounts[i] === undefined) {
-                                    i++;
-                                }
-                                if (billSnap.val().bills[key].accounts[i].debitor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending') {
-                                    usersDebit.push(billSnap.val().bills[key].accounts[i]);
-                                } else if (billSnap.val().bills[key].accounts[i].creditor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending') {
-                                    userdCredit.push(billSnap.val().bills[key].accounts[i]);
-                                }
-                            }
+        let billRef  = firebase.database().ref().child('bill');
+        billRef.orderByChild('id').equalTo(this.props.tripId).on('child_added',billSnap =>{
+            for(let key in billSnap.val().bills){
+                if (billSnap.val().bills[key].accounts !== undefined) {
+                    for (let i = 0; i < billSnap.val().bills[key].accounts.length; i++) {
+                        if (billSnap.val().bills[key].accounts[i] === undefined) {
+                            i++;
+                        }
+                        if (billSnap.val().bills[key].accounts[i].debitor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending') {
+                            usersDebit.push(billSnap.val().bills[key].accounts[i]);
+                        } else if (billSnap.val().bills[key].accounts[i].creditor === this.props.user && billSnap.val().bills[key].accounts[i].status === 'pending') {
+                            userdCredit.push(billSnap.val().bills[key].accounts[i]);
                         }
                     }
-                    this.setState({
-                        debitor:usersDebit,
-                        creditor:userdCredit
-                    },()=>{
-                        console.log("**********",this.state.debitor,this.state.creditor)
-                    })
-                })
+                }
             }
-        });
 
+            this.setState({
+                debitor:usersDebit,
+                creditor:userdCredit
+            },()=>{
+                console.log("**********",this.state.debitor,this.state.creditor)
+            })
+        });
 
     }
 
@@ -141,8 +147,8 @@ class GeneratedBill extends Component {
             rootRef.child(parentKey).child('bills').off('child_added',billFetch2)
         };
 
-        rootRef.orderByChild('id').equalTo(this.state.tripID).on('child_added', fetchBill);
-        rootRef.orderByChild('id').equalTo(this.state.tripID).off('child_added', fetchBill)
+        rootRef.orderByChild('id').equalTo(this.props.tripId).on('child_added', fetchBill);
+        rootRef.orderByChild('id').equalTo(this.props.tripId).off('child_added', fetchBill)
 
         let prevDebitor = this.state.debitor;
         for(var j = 0; j < prevDebitor.length; j++) {
@@ -155,7 +161,7 @@ class GeneratedBill extends Component {
         }
         this.setState({
             debitor : prevDebitor
-        })
+        });
 
         alert("You paid Rs."+item.amount+" to "+item.creditor)
     }
@@ -197,8 +203,8 @@ class GeneratedBill extends Component {
             rootRef.child(parentKey).child('bills').off('child_added',deleteBill2)
         };
 
-        rootRef.orderByChild('id').equalTo(this.state.tripID).on('child_added', deleteBill);
-        rootRef.orderByChild('id').equalTo(this.state.tripID).off('child_added', deleteBill)
+        rootRef.orderByChild('id').equalTo(this.props.tripId).on('child_added', deleteBill);
+        rootRef.orderByChild('id').equalTo(this.props.tripId).off('child_added', deleteBill)
 
         let prevCreditor = this.state.creditor;
         for(var j = 0; j < prevCreditor.length; j++) {

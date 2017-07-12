@@ -1,7 +1,3 @@
-/**
- * Created by saubhagya on 3/7/17.
- */
-
 import React, { Component } from 'react';
 import '../App.css';
 
@@ -17,15 +13,13 @@ class Image extends Component {
         }
     }
 
-
     onCheckboxClick = () => {
 
         if(this.state.checked === false){
             this.setState({
                 checked:true,
                 ImageUrl:this.props.source
-            },function(){
-                //console.log('$$$$$$$$$$$$$$$$$$$',this.state.checked,'DDDDDDDDDDDDD',this.state.ImageUrl);
+            },()=> {
                 this.props.imageSelector(this.state.ImageUrl);
             })
         }
@@ -33,7 +27,7 @@ class Image extends Component {
             this.setState({
                 checked:false,
                 ImageUrl:this.props.source
-            },function(){
+            },()=>{
                 this.props.imageSelector(this.state.ImageUrl);
             })
         }

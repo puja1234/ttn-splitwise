@@ -265,7 +265,7 @@ th {
 }
 
 .image-urls{
-  width:100%;
+  width:20%;
 }
 
 .image-link{
@@ -374,7 +374,7 @@ progress {
 }
 
 .storage-div{
-  width: 1000px;
+  width: 910px;
   float: right;
   border: 3px solid lightgray;
   margin: 5px;

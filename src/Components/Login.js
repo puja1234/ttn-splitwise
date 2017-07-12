@@ -43,10 +43,10 @@ class Login extends Component {
 
     googleSignIn=()=> {
         let provider = new firebase.auth.GoogleAuthProvider();
-         const promise = firebase.auth().signInWithRedirect(provider);
-         promise.catch(e =>{
-             console.log(e.message)
-         })
+        const promise = firebase.auth().signInWithRedirect(provider);
+        promise.catch(e =>{
+            console.log(e.message)
+        })
     };
 
     render() {

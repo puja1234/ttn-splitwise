@@ -14,35 +14,27 @@ class OriginalMembers extends Component {
     componentWillMount(){
         let localMembers ;
         let that = this;
-        let rootRef = firebase.database().ref().child('trip');
-        console.log("originalMembers ",this.props.trip);
-        rootRef.orderByChild('tripName').equalTo(this.props.trip).on('value',snap => {
-            console.log("originalMembers ",snap.val());
-            for(let key in snap.val()){
-                if (snap.val()[key].members.indexOf(this.props.user) !== -1) {
-                   localMembers = snap.val()[key].members
-                }
-            }
-          that.setState({
-              myMemberList: localMembers
-          })
+        let rootRef = firebase.database().ref('trip/'+this.props.tripId);
+        rootRef.once('value',snap =>{
+            localMembers = snap.val().members;
+            that.setState({
+                myMemberList: localMembers
+            },()=>{
+                console.log("inside originalMemberComponent",this.state.myMemberList)
+            })
         })
     }
 
     componentWillReceiveProps(){
         let localMembers ;
         let that = this;
-        let rootRef = firebase.database().ref().child('trip');
-        console.log("originalMembers ",this.props.trip);
-        rootRef.orderByChild('tripName').equalTo(this.props.trip).on('value',snap => {
-            console.log("originalMembers ",snap.val());
-            for(let key in snap.val()){
-                if (snap.val()[key].members.indexOf(this.props.user) !== -1) {
-                    localMembers = snap.val()[key].members
-                }
-            }
+        let rootRef = firebase.database().ref('trip/'+this.props.tripId);
+        rootRef.once('value',snap =>{
+            localMembers = snap.val().members;
             that.setState({
                 myMemberList: localMembers
+            },()=>{
+                console.log("inside originalMemberComponent",this.state.myMemberList)
             })
         })
     }
@@ -56,7 +48,7 @@ class OriginalMembers extends Component {
                         <div>
                             {
                                 this.state.myMemberList.map((item) =>(
-                                    <DeleteMembers userEmail={item} user={this.props.user} trip={this.props.trip} deleteMembersDone={this.props.deleteMembersDone}/>
+                                    <DeleteMembers userEmail={item} user={this.props.user} trip={this.props.trip} tripId={this.props.tripId} deleteMembersDone={this.props.deleteMembersDone}/>
                                     ))
                             }
                         </div> :

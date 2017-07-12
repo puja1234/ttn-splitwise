@@ -19,7 +19,7 @@ class ViewExpense extends Component{
         }
         else{
             template = (<div>
-                <Expense tripInfo={this.props.tripInfo}  user={this.props.user}/>
+                <Expense tripInfo={this.props.tripInfo}  user={this.props.user} tripId={this.props.tripId}/>
             </div>)
         }
         return(

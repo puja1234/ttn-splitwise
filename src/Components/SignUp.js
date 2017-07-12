@@ -24,7 +24,7 @@ class SignUp extends Component{
             const promise = auth.createUserWithEmailAndPassword(this.state.email, this.state.password);
             promise.catch(e => {
                 console.log(e.message);
-                alert("Email address is badly formatted")
+                alert(e.message)
             });
         }
     };

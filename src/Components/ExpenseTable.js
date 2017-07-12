@@ -17,84 +17,40 @@ class ExpenseTable extends Component {
 
     componentDidMount(){
         let tripName = this.props.tripName;
-        let localKey;
         console.log("inside table component :",tripName);
-        let rootRef = firebase.database().ref().child('trip');
-        rootRef.orderByChild("tripName").equalTo(tripName).on('value', snap => {
+        let rootRef = firebase.database().ref('trip/'+this.props.tripId);
+        rootRef.once('value' , snap=>{
             this.setState({
-                trans:snap.val()
-            },()=>{
-                console.log("inside table :",this.state.trans);
-                for(let key in this.state.trans){
-                    if(this.state.trans.hasOwnProperty(key)) {
-                        if (this.state.trans[key].members.indexOf(this.props.user) !== -1) {
-                            console.log("has property :", this.state.trans[key].transaction);
-                            this.setState({
-                                trans2: this.state.trans[key].transaction,
-                                myMembers : this.state.trans[key].members
-                            }, () => {
-                                console.log("inside table component :", this.state.trans2)
-
-                            })
-                        }
-                    }
-                }
-            });
-
-
-
+                trans2: snap.val().transaction,
+                myMembers : snap.val().members
+            }, () => {
+                console.log("inside table component :", this.state.trans2)
+            })
         });
     }
 
     componentWillReceiveProps(){
         let tripName = this.props.tripName;
-        let localKey;
-        console.log("inside table component :",tripName)
-        let rootRef = firebase.database().ref().child('trip');
-        rootRef.orderByChild("tripName").equalTo(tripName).on('value', snap => {
+        console.log("inside table component :",tripName);
+        let rootRef = firebase.database().ref('trip/'+this.props.tripId);
+        rootRef.once('value' , snap=>{
             this.setState({
-                trans:snap.val()
-            },()=>{
-                console.log("inside table :",this.state.trans)
-                for(let key in this.state.trans){
-                    if(this.state.trans.hasOwnProperty(key)) {
-                        if (this.state.trans[key].members.indexOf(this.props.user) !== -1) {
-                            localKey = snap.key;
-                            console.log("has property :", this.state.trans[key].transaction);
-                            this.setState({
-                                trans2: this.state.trans[key].transaction,
-                                myMembers : this.state.trans[key].members
-                            }, () => {
-                                console.log("inside table component :", this.state.trans2)
-
-                            })
-                        }
-                    }
-                }
-                this.setState({
-                    transKey : localKey
-                })
-            });
-
-
-
+                trans2: snap.val().transaction,
+                myMembers : snap.val().members,
+                transKey:this.props.tripId
+            }, () => {
+                console.log("inside table component :", this.state.trans2)
+            })
         });
     }
 
     deleteTransaction(transactionReceived){
-        let that = this;
-        let transKey;
         console.log("transaction to be deleted is:",transactionReceived);
-        let rootRef = firebase.database().ref().child('trip');
-        rootRef.orderByChild('tripName').equalTo(this.props.tripName).once('child_added',function (snap) {
-            if(snap.val().members.indexOf(that.props.user) !== -1){
-                transKey = snap.key;
-            }
-        });
-        rootRef.child(transKey).child('transaction').on('child_added',(snap)=>{
-            console.log("snap is:",snap.val());
+        let rootRef = firebase.database().ref('trip/'+this.props.tripId+'/transaction');
+
+        rootRef.on('child_added',(snap)=>{
             if(snap.val().transactioObject.amount === transactionReceived.amount && snap.val().transactioObject.spend_by === transactionReceived.spend_by && snap.val().transactioObject.title === transactionReceived.title && snap.val().transactioObject.generatedBill===false) {
-               rootRef.child(transKey).child('transaction').child(snap.key).remove();
+               rootRef.child(snap.key).remove();
             }
         })
     }
@@ -106,26 +62,16 @@ class ExpenseTable extends Component {
     }
 
     updateTransaction(prevTrans,newTrans){
-        console.log("change ",prevTrans," to ",newTrans);
-        let that = this;
-        let transKey;
-        console.log("transaction to be deleted is:",prevTrans);
-        let rootRef = firebase.database().ref().child('trip');
-        rootRef.orderByChild('tripName').equalTo(this.props.tripName).once('child_added',function (snap) {
-            if(snap.val().members.indexOf(that.props.user) !== -1){
-                transKey = snap.key;
-            }
-        });
-        rootRef.child(transKey).child('transaction').on('child_added',(snap)=>{
-            console.log("snap is:",snap.val());
+        let rootRef = firebase.database().ref('trip/'+this.props.tripId+'/transaction');
+
+        rootRef.on('child_added',(snap)=>{
             if(snap.val().transactioObject.amount === prevTrans.amount && snap.val().transactioObject.spend_by === prevTrans.spend_by && snap.val().transactioObject.title === prevTrans.title && snap.val().transactioObject.generatedBill===false) {
-                console.log("update",snap.key,snap.val().transactioObject);
-                rootRef.child(transKey).child('transaction').child(snap.key).child('transactioObject').update({amount:newTrans.amount,generatedBill:false,spend_by:newTrans.spend_by,title:newTrans.title})
+                rootRef.child(snap.key).child('transactioObject').update({amount:newTrans.amount,generatedBill:false,spend_by:newTrans.spend_by,title:newTrans.title})
             }
+            this.setState({
+                edit:false
+            })
         });
-        this.setState({
-            edit:false
-        })
     }
 
     render() {

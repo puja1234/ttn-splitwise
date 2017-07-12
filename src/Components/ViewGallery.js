@@ -1,6 +1,4 @@
-/**
- * Created by saubhagya on 9/7/17.
- */
+
 import React, { Component } from 'react';
 import '../App.css';
 import Storage from './Storage'
@@ -21,6 +19,7 @@ class ViewGallery extends Component{
             template = (<div className='storage-div'>
                 <h3>Welcome to trip {this.props.trip}</h3>
                 <Storage trip={this.props.trip}
+                         tripId = {this.props.tripId}
                          user={this.props.user}
                          myImages={this.props.myImages}/>
             </div>)

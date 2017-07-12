@@ -16,35 +16,21 @@ class Expense extends Component {
     }
 
     componentWillMount() {
-        let tripName = this.props.tripInfo;
-        let localMembers;
         let that = this;
-        let rootRef = firebase.database().ref().child('trip');
-        rootRef.orderByChild("tripName").equalTo(tripName).once('value', snap => {
-            for (let key in snap.val()) {
-                if (snap.val()[key].members.indexOf(this.props.user) !== -1) {
-                    localMembers = snap.val()[key].members
-                }
-            }
+        let rootRef = firebase.database().ref('trip/'+this.props.tripId);
+        rootRef.once('value',snap => {
             that.setState({
-                members: localMembers
+                members: snap.val().members
             })
         })
     }
 
     componentWillReceiveProps() {
-        let tripName = this.props.tripInfo;
-        let localMembers;
         let that = this;
-        let rootRef = firebase.database().ref().child('trip');
-        rootRef.orderByChild("tripName").equalTo(tripName).once('value', snap => {
-            for (let key in snap.val()) {
-                if (snap.val()[key].members.indexOf(this.props.user) !== -1) {
-                    localMembers = snap.val()[key].members
-                }
-            }
+        let rootRef = firebase.database().ref('trip/'+this.props.tripId);
+        rootRef.once('value',snap => {
             that.setState({
-                members: localMembers
+                members: snap.val().members
             })
         })
     }
@@ -57,16 +43,14 @@ class Expense extends Component {
 
     onSubmit(event) {
         event.preventDefault();
-        let user = this.props.user;
-        let trip = this.props.tripInfo;
-        console.log("trip on button click is :", trip);
         let regex = /^[0-9]{1,10}$/;
+
         if (this.state.spend_by === '' || this.state.amount === '' || this.state.title === '') {
             alert("Fields cannot be empty!!!")
         } else if (regex.test(this.state.amount) === false) {
             alert("Amount should be a number only")
         } else {
-            let rootRef = firebase.database().ref().child('trip');
+            let rootRef = firebase.database().ref('trip/'+this.props.tripId);
             let transactioObject = {
                 spend_by: this.state.spend_by,
                 amount: this.state.amount,
@@ -74,7 +58,26 @@ class Expense extends Component {
                 generatedBill: false,
                 createdAt:moment().format()
             };
-            rootRef.orderByChild("tripName").equalTo(trip).on('child_added', function (snap) {
+
+            rootRef.once('value',snap => {
+                    if (snap.val().hasOwnProperty('transaction')) {
+                        console.log("inside Expense Form",snap.val().transaction);
+                        snap.ref.child('transaction').push({transactioObject});
+                    }else{
+                        console.log("doest not have transaction");
+                        snap.ref.update({transaction: []});
+                        snap.ref.child('transaction').push({transactioObject});
+                    }
+                }
+            );
+            this.setState({
+                spend_by: '',
+                amount: '',
+                title: ''
+            })
+        }
+    }
+           /* rootRef.orderByChild("tripName").equalTo(trip).on('child_added', function (snap) {
                 console.log("^^^^^^^^^^^^^^^^^", transactioObject)
                 if (snap.val().hasOwnProperty('transaction')) {
                     if (snap.val().members.indexOf(user) !== -1) {
@@ -89,14 +92,7 @@ class Expense extends Component {
                     }
                 }
             });
-        }
-
-        this.setState({
-            spend_by: '',
-            amount: '',
-            title: ''
-        })
-    }
+        }*/
 
     onChangeSpendBy(event) {
         this.setState({
@@ -157,7 +153,7 @@ class Expense extends Component {
                     </div>
                     <div><button className="submit-btn common-btn" onClick={this.onSubmit.bind(this)}>Submit</button></div>
                 </div>
-                <ExpenseTable tripName={this.props.tripInfo} user={this.props.user}/>
+                <ExpenseTable tripName={this.props.tripInfo} user={this.props.user} tripId={this.props.tripId}/>
 
             </div>
 

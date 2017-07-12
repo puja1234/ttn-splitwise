@@ -12,29 +12,19 @@ class DeleteMembers extends Component {
     deleteMember(item){
         let localMembers;
         let that = this;
-        let rootRef = firebase.database().ref().child('trip');
-        rootRef.orderByChild('tripName').equalTo(this.props.trip).once('value',snap => {
-            for(let key in snap.val()){
-                if (snap.val()[key].members.indexOf(this.props.user) !== -1) {
-                    localMembers = snap.val()[key].members;
-                    let index = localMembers.indexOf(item);
-                    if (index > -1) {
-                        localMembers.splice(index, 1);
-                    }
-                    console.log("######3",localMembers)
-                }
+        let rootRef = firebase.database().ref('trip/'+this.props.tripId);
+        rootRef.once('value',snap => {
+            localMembers = snap.val().members;
+            let index = localMembers.indexOf(item);
+            if (index > -1) {
+                localMembers.splice(index, 1);
             }
-
             this.setState({
                 myMembers:localMembers
             },()=>{
                 //now update db members count
                 console.log("######### PPPP inside delete members :",this.state.myMembers)
-                rootRef.orderByChild('tripName').equalTo(this.props.trip).once('child_added',snap => {
-
-                    let ref = rootRef.child(snap.key);
-                    ref.update({members:this.state.myMembers});
-                })
+                rootRef.update({members:this.state.myMembers});
             })
         })
     }

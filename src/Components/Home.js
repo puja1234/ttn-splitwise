@@ -3,13 +3,10 @@ import '../App.css';
 import TripMembers from './TripMembers'
 import * as firebase from 'firebase'
 import HomePage from './HomePage'
-import Expense from './Expense'
-import Bill from './Bill'
-import Storage from './Storage'
 import OriginalMembers from './OriginalMembers'
 import ViewGallery from './ViewGallery'
 import ViewExpense from './ViewExpense'
-import { BrowserRouter as Router, Route ,Link, Redirect} from 'react-router-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 class Home extends Component {
     constructor(){
@@ -18,8 +15,8 @@ class Home extends Component {
             newTrip:'',
             memberCount:'',
             trip:'',
+            tripId:'',
             myTrips:[],
-            tripInfo:'',
             members:[],
             viewExpense:false,
             viewGallery:false,
@@ -42,9 +39,10 @@ class Home extends Component {
         });
 
         let rootRef = firebase.database().ref().child('trip');
-        rootRef.on('value', snap => {
+        /*rootRef.on('value', snap => {
             myTripLocal=[];
             let object1=snap.val();
+            console.log("inside home component ",snap.val());
             for(let key in object1){
                 let obj=object1[key];
                 if(obj.members.indexOf(by)!==-1){
@@ -55,7 +53,24 @@ class Home extends Component {
             this.setState({
                 myTrips:myTripLocal
             })
+        });*/
+        myTripLocal=[];
+        rootRef.on('child_added',snap =>{
+            if(snap.val().members.indexOf(by) !== -1){
+                console.log("inside home component",snap.val(),snap.key);
+                let obj=snap.val();
+                obj.id=snap.key;
+                myTripLocal.push(obj);
+                console.log("inside home component 2",myTripLocal);
+                this.setState({
+                    myTrips:myTripLocal
+                },()=>{
+                    console.log("3",this.state.myTrips)
+                })
+            }
         });
+
+
     }
 
     logOut(){
@@ -89,6 +104,7 @@ class Home extends Component {
     }
 
     onChangeCategory(event){
+        console.log(this.state.myTrips[event.target.value]);
         let imageArray = [];
         let that = this;
         let tripMembers = 0;
@@ -106,16 +122,13 @@ class Home extends Component {
         if(event.target.value === 'Select Trip'){
             alert("this cannot be a trip")
         }else {
-            let url = window.location.href;
-            let addressUrl = url.substr(url.lastIndexOf('/'));
             this.setState({
-                trip: event.target.value
+                trip: this.state.myTrips[event.target.value].tripName,
+                tripId:this.state.myTrips[event.target.value].id
             }, () => {
-
                 this.state.myTrips.map((item)=>{
                     if(item.tripName === this.state.trip){
                         this.setState({
-                            tripInfo:item.tripName,
                             members:item.members,
                             viewExpense:true,
                         })
@@ -197,36 +210,42 @@ class Home extends Component {
     }
 
     deleteTrip(){
-
-        let rootRef = firebase.database().ref().child('trip');
+        let rootRef = firebase.database().ref('trip/'+this.state.tripId);
         let billRef = firebase.database().ref().child('bill');
-        let tripKey ,billKey;
         let that = this;
+        let localTrips = this.state.myTrips;
+
+        localTrips.map((item,index)=>{
+            if(item.tripName === this.state.trip){
+                localTrips.splice(index,1)
+            }
+        });
+
+       this.setState({
+           myTrips : localTrips
+       });
 
         alert(this.state.trip+" has been deleted ");
-        rootRef.orderByChild("tripName").equalTo(this.state.trip).once('child_added', function (snapshot) {
-            tripKey = snapshot.key;
-             rootRef.child(tripKey).remove();
-            billRef.orderByChild('id').equalTo(tripKey).once('child_added',function (billSnap) {
-                billKey = billSnap.key;
-                billRef.child(billKey).remove();
+
+        rootRef.remove();
+            billRef.orderByChild('id').equalTo(this.state.tripId).once('child_added',billSnap => {
+                billRef.child(billSnap.key).remove();
+                that.setState({
+                    newTrip:'',
+                    memberCount:'',
+                    trip:'',
+                    members:[],
+                    viewExpense:false,
+                    myImages:[],
+                    tripId:'',
+                    displayStorage:false,
+                    showMembers : false,
+                    localMembers : '',
+                    deleteMembers : false,
+                    showInput : false
+                })
             });
-             that.setState({
-                 newTrip:'',
-                 memberCount:'',
-                 trip:'',
-                 myTrips:[],
-                 tripInfo:'',
-                 members:[],
-                 viewExpense:false,
-                 myImages:[],
-                 displayStorage:false,
-                 showMembers : false,
-                 localMembers : '',
-                 deleteMembers : false,
-                 showInput : false
-             })
-        });
+
     }
 
     render() {
@@ -287,6 +306,7 @@ class Home extends Component {
                                                 < TripMembers
                                                     memberCount={this.state.memberCount}
                                                     trip={this.state.trip}
+                                                    tripId = {this.state.tripId}
                                                     user={this.props.user}
                                                     clearState={this.clearState} />
                                             </div>
@@ -303,6 +323,7 @@ class Home extends Component {
                                                     />
                                                     <OriginalMembers
                                                         trip={this.state.trip}
+                                                        tripId = {this.state.tripId}
                                                         user={this.props.user}
                                                     />
                                                     {
@@ -310,6 +331,7 @@ class Home extends Component {
                                                             <TripMembers
                                                                 memberCount={this.state.localMembers}
                                                                 trip={this.state.trip}
+                                                                tripId = {this.state.tripId}
                                                                 user={this.props.user}
                                                                 clearState={this.clearState}
                                                                 hasoriginalMembers = {this.state.showInput}
@@ -327,6 +349,7 @@ class Home extends Component {
                                                 <div>
                                                     <OriginalMembers
                                                         trip={this.state.trip}
+                                                        tripId = {this.state.tripId}
                                                         user={this.props.user}
                                                         deleteMembers={this.state.deleteMembers}
                                                         deleteMembersDone = {this.deleteMembersDone.bind(this)}
@@ -343,8 +366,8 @@ class Home extends Component {
 
                     <select className="dropdown trip-select-option" onChange={this.onChangeCategory.bind(this)} value={this.state.trip}>
                         <option value="Select Trip">Select Trip</option>
-                        {this.state.myTrips.map((item)=>(
-                            <option value={item.tripName}>{item.tripName}</option>
+                        {this.state.myTrips.map((item,index)=>(
+                            <option value={index} key={index}>{item.tripName}</option>
                         ))}
                     </select>
 
@@ -352,16 +375,19 @@ class Home extends Component {
                 <Router>
                     <div className="home-content-wrapper">
                         <Route exact path="/" render={props => (<HomePage {...props}
-                                                                    trip={this.state.trip}
-                                                                    user={this.props.user}/>)}/>
+                                                                          trip={this.state.trip}
+                                                                          tripId = {this.state.tripId}
+                                                                          user={this.props.user}/>)}/>
 
                         <Route exact path="/gallery" render={props => (<ViewGallery {...props}
-                                                                              trip={this.state.trip}
-                                                                              user={this.props.user}
-                                                                              myImages={this.state.myImages}/>)}/>
+                                                                                    trip={this.state.trip}
+                                                                                    tripId = {this.state.tripId}
+                                                                                    user={this.props.user}
+                                                                                    myImages={this.state.myImages}/>)}/>
                         <Route exact path="/myExpense" render={props => (<ViewExpense {...props}
-                                                                            tripInfo={this.state.trip}
-                                                                            user={this.props.user}/>)}/>
+                                                                                      tripId = {this.state.tripId}
+                                                                                      tripInfo={this.state.trip}
+                                                                                      user={this.props.user}/>)}/>
                     </div>
                 </Router>
 
@@ -371,3 +397,4 @@ class Home extends Component {
 }
 
 export default Home;
+
