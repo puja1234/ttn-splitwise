@@ -19,6 +19,7 @@ class ViewGallery extends Component{
                     <Storage trip={this.props.trip}
                              tripId = {this.props.tripId}
                              user={this.props.user}
+                             componentDisp={this.props.componentDisp}
                              myImages={this.props.myImages}/>
                 </div>)
             }else{

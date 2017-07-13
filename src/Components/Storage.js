@@ -11,8 +11,21 @@ class Storage extends Component{
             selectedImageUrl:'',
             localArray:[],
             imageUrl:[],
-            linkDisplay:false
+            linkDisplay:false,
+            selectedLinks:false
         }
+    }
+
+    componentDidMount = () => {
+        this.setState({
+            selectedLinks:false
+        })
+    }
+
+    componentWillReceiveProps = () => {
+        this.setState({
+            selectedLinks:false
+        })
     }
 
     onImageUploaderChange = (event) => {
@@ -61,6 +74,9 @@ class Storage extends Component{
     };
 
     onSelectImage = (url) => {
+        this.setState({
+            selectedLinks:false
+        })
         let imageUrlArray = [];
         let flag = 0;
         imageUrlArray = this.state.localArray;
@@ -77,7 +93,8 @@ class Storage extends Component{
                 console.log('value-------------',this.state.selectedImageUrl);
                 imageUrlArray.push(this.state.selectedImageUrl);
                 this.setState({
-                    localArray: imageUrlArray
+                    localArray: imageUrlArray,
+                    selectedLinks:true
                 })
             });
         }
@@ -180,31 +197,35 @@ class Storage extends Component{
 
                 </div>
 
-                <div className="download-div">
-                    Download images:-
-                    <div className="image-render">
-                        {this.props.myImages.map((item)=>(
-                            <Image source={item} imageSelector={this.onSelectImage.bind(this)}/>
-                        ))}
-                    </div>
+                {this.props.componentDisp?
+                    <div className="download-div">
+                        Download images:-
+                        <div className="image-render">
+                            {this.props.myImages.map((item)=>(
+                                <Image source={item} imageSelector={this.onSelectImage.bind(this)}/>
+                            ))}
+                        </div>
 
-                    <button className="common-btn download-btn" onClick={this.onImgDownload.bind(this)}>Download images</button>
+                        <button className="common-btn download-btn" onClick={this.onImgDownload.bind(this)}>Download images</button>
 
-                    <button className="common-btn download-btn" onClick={this.onImgDeleted.bind(this)}>Delete images</button>
+                        <button className="common-btn download-btn" onClick={this.onImgDeleted.bind(this)}>Delete images</button>
 
 
-                    {/*can't provide height and width as there are no
-                    file metadata properties that allows us to do so in firebase storage*/}
-                    <div className="storage-downloads">
-                        {
-                            imagesArray.map((item)=>(
-                                <a download="ttn-app-image" href={item}>image link</a>
-                            ))
+                        {/*can't provide height and width as there are no
+                         file metadata properties that allows us to do so in firebase storage*/}
+                        {this.state.selectedLinks?
+                            <div className="storage-downloads">
+                                {
+                                    imagesArray.map((item)=>(
+                                        <a download="ttn-app-image" href={item}>image link</a>
+                                    ))
+                                }
+
+                            </div>:''
                         }
 
-                    </div>
-
-                </div>
+                    </div>:''
+                }
             </div>
         );
 

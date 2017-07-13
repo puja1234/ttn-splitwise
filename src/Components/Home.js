@@ -21,7 +21,8 @@ class Home extends Component {
             showMembers : false,
             localMembers : '',
             deleteMembers : false,
-            showInput : false
+            showInput : false,
+            componentDisp:false
         };
         this.clearState = this.clearState.bind(this);
         this.onChangeHandler = this.onChangeHandler.bind(this);
@@ -82,6 +83,9 @@ class Home extends Component {
 
     onChangeCategory(event){
         console.log(this.state.myTrips[event.target.value]);
+        this.setState({
+            componentDisp:false
+        })
         let imageArray = [];
         let that = this;
         let tripMembers = 0;
@@ -113,7 +117,28 @@ class Home extends Component {
                     }
                 });
 
-                let rootRef = firebase.database().ref().child('trip');
+                let rootRef = firebase.database().ref('trip/'+this.state.tripId);
+                rootRef.once('value', (snapshot) => {
+                    tripMembers =  snapshot.val().members.length;
+                    if (snapshot.val().imageFiles !== undefined) {
+                        snapshot.ref.child('imageFiles').on('value', function (imageSnap) {
+                            imageSnap.forEach(function (childImageSnap) {
+                                let url = childImageSnap.val().imageURL;
+                                imageArray.push(url);
+                            })
+                        })
+                        that.setState({
+                            componentDisp:true
+                        })
+                    }
+                    that.setState({
+                        localMembers: tripMembers
+                    },() => {
+                        updateImageState();
+                    })
+                })
+
+                /*let rootRef = firebase.database().ref().child('trip');
                 rootRef.orderByChild("tripName").equalTo(this.state.trip).on('value', function (snapshot) {
                     imageArray=[];
                     if(snapshot.child !== -1) {
@@ -137,7 +162,7 @@ class Home extends Component {
                     }
                     updateImageState();
 
-                });
+                });*/
             })
         }
     }
@@ -359,6 +384,7 @@ class Home extends Component {
                                                                                     trip={this.state.trip}
                                                                                     tripId = {this.state.tripId}
                                                                                     user={this.props.user}
+                                                                                    componentDisp={this.state.componentDisp}
                                                                                     myImages={this.state.myImages}/>)}/>
                         <Route exact path="/myExpense" render={props => (<ViewExpense {...props}
                                                                                       tripId = {this.state.tripId}
