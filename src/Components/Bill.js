@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../App.css';
 import * as firebase from 'firebase'
 import GeneratedBill from './GeneratedBill'
 import moment from 'moment'

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
 import * as firebase from 'firebase'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Login from './Components/Login'
 import Home from './Components/Home'
 import Loader from './Components/Loader'

@@ -1,6 +1,4 @@
-
 import React, { Component } from 'react';
-import '../App.css';
 import Storage from './Storage'
 import photoGallery from '../Images/photoGallery2.jpg'
 
@@ -10,7 +8,6 @@ class ViewGallery extends Component{
     }
 
     render(){
-        console.log('props in gallery!!!!!!!!!!!!!!!!!',this.props);
         let template;
         if(this.props.trip == '' && this.props.myImages == ''){
             template = (<div className="no-trip-selected"><img src={photoGallery} alt="Gallery Img"/></div>)

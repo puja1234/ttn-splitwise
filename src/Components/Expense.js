@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import '../App.css';
 import ExpenseTable from './ExpenseTable'
 import * as firebase from 'firebase'
 import moment from 'moment'

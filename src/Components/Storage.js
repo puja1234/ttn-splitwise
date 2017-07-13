@@ -1,7 +1,4 @@
-
 import React, { Component } from 'react';
-import '../App.css';
-import TripMembers from './TripMembers'
 import * as firebase from 'firebase'
 import Image from './Image'
 

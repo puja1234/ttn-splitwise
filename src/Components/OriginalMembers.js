@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../App.css';
 import * as firebase from 'firebase'
 import DeleteMembers from './DeleteMembers'
 

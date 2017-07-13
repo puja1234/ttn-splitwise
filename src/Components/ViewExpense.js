@@ -1,8 +1,4 @@
-/**
- * Created by saubhagya on 9/7/17.
- */
 import React, { Component } from 'react';
-import '../App.css';
 import Expense from './Expense'
 import expense from '../Images/expenses.jpg'
 

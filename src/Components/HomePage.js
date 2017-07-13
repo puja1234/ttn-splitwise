@@ -1,10 +1,7 @@
-
 import React, { Component } from 'react';
-import '../App.css';
 import Expense from './Expense'
 import Bill from './Bill'
 import AboutUs from './AboutUs'
-
 
 class HomePage extends Component{
     constructor(props){

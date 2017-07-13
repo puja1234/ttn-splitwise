@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../App.css';
 import MemberDetails from './MemberDetails'
 import * as firebase from 'firebase'
 import moment from 'moment'

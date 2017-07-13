@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../App.css';
 import TripMembers from './TripMembers'
 import * as firebase from 'firebase'
 import HomePage from './HomePage'
@@ -39,21 +38,6 @@ class Home extends Component {
         });
 
         let rootRef = firebase.database().ref().child('trip');
-        /*rootRef.on('value', snap => {
-            myTripLocal=[];
-            let object1=snap.val();
-            console.log("inside home component ",snap.val());
-            for(let key in object1){
-                let obj=object1[key];
-                if(obj.members.indexOf(by)!==-1){
-                    myTripLocal.push(obj);
-                }
-            }
-
-            this.setState({
-                myTrips:myTripLocal
-            })
-        });*/
         myTripLocal=[];
         rootRef.on('child_added',snap =>{
             if(snap.val().members.indexOf(by) !== -1){
@@ -69,8 +53,6 @@ class Home extends Component {
                 })
             }
         });
-
-
     }
 
     logOut(){
@@ -89,6 +71,7 @@ class Home extends Component {
                     showMembers:false,
                     viewExpense:false,
                     deleteMembers : false,
+                    tripId:'',
                     [event.target.name]: event.target.value
                 });
             }
@@ -98,6 +81,7 @@ class Home extends Component {
                 showMembers:false,
                 viewExpense:false,
                 deleteMembers : false,
+                tripId:'',
                 [event.target.name]: event.target.value
             });
         }

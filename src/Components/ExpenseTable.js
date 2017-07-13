@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import '../App.css';
-import TransactionTable from './TransactionTable'
 import Edit from './Edit'
 import * as firebase from 'firebase'
 

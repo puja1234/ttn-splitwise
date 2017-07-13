@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../App.css';
 import SignUp from './SignUp'
 import * as firebase from 'firebase'
 
