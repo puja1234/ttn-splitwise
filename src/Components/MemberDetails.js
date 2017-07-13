@@ -17,20 +17,23 @@ class MemberDetails extends Component{
     }
 
     doneHandler(){
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if(this.state.memberDetail.length===0){
             alert("Member name cannot be empty!!!")
+        }
+        else if(re.test(this.state.memberDetail)=== false){
+            alert("Enter valid email-id!!!")
         }else if(this.props.members.indexOf(this.state.memberDetail) >=0 ) {
             alert("Member already exist");
             this.setState({
                 memberDetail:''
             })
-        }
-        else
-        {
+        }else {
             this.props.addMember(this.state.memberDetail);
             this.setState({
                 view: false
-            })
+            });
+            this.props.addmoreTrue();
         }
     }
 
@@ -41,8 +44,9 @@ class MemberDetails extends Component{
                 {this.state.view
                     ?
                     <button className="common-btn" onClick={this.doneHandler.bind(this)}>Done </button>
-                :
-                ''}
+                    :
+                    ''
+                }
             </div>
         )
     }

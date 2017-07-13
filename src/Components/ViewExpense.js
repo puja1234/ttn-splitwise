@@ -14,9 +14,13 @@ class ViewExpense extends Component{
             template = (<div className="no-trip-selected"><img src={expense} alt="Expense Img"/></div>)
         }
         else{
-            template = (<div>
-                <Expense tripInfo={this.props.tripInfo}  user={this.props.user} tripId={this.props.tripId}/>
-            </div>)
+            if(this.props.tripId) {
+                template = (<div>
+                    <Expense tripInfo={this.props.tripInfo} user={this.props.user} tripId={this.props.tripId}/>
+                </div>)
+            }else {
+                template = (<div className="no-trip-selected"><img src={expense} alt="Expense Img"/></div>)
+            }
         }
         return(
             <div>

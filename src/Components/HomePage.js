@@ -14,13 +14,17 @@ class HomePage extends Component{
         if(this.props.trip == ''){
             template = (<AboutUs/>)
         }
-        else{
+        else {
+            if (this.props.tripId) {
             template = (
                 <div>
-                    <Expense tripInfo={this.props.trip}  user={this.props.user} tripId={this.props.tripId}/>
+                    <Expense tripInfo={this.props.trip} user={this.props.user} tripId={this.props.tripId}/>
                     <Bill tripName={this.props.trip} user={this.props.user} tripId={this.props.tripId}/>
                 </div>
             )
+            }else{
+                template = (<AboutUs/>)
+            }
         }
         return(
             <div>

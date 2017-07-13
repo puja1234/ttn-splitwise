@@ -11,14 +11,11 @@ class Home extends Component {
     constructor(){
         super();
         this.state={
-            newTrip:'',
             memberCount:'',
             trip:'',
             tripId:'',
             myTrips:[],
             members:[],
-            viewExpense:false,
-            viewGallery:false,
             myImages:[],
             displayStorage:false,
             showMembers : false,
@@ -41,15 +38,11 @@ class Home extends Component {
         myTripLocal=[];
         rootRef.on('child_added',snap =>{
             if(snap.val().members.indexOf(by) !== -1){
-                console.log("inside home component",snap.val(),snap.key);
                 let obj=snap.val();
                 obj.id=snap.key;
                 myTripLocal.push(obj);
-                console.log("inside home component 2",myTripLocal);
                 this.setState({
                     myTrips:myTripLocal
-                },()=>{
-                    console.log("3",this.state.myTrips)
                 })
             }
         });
@@ -57,7 +50,7 @@ class Home extends Component {
 
     logOut(){
         firebase.auth().signOut();
-        window.location.href='/'; //also tried <Redirect to='/'/> , but nothig happened.
+        window.location.href='/';
     }
 
     onChangeHandler(event, key){
@@ -79,9 +72,9 @@ class Home extends Component {
             this.setState({
                 displayStorage:false,
                 showMembers:false,
-                viewExpense:false,
                 deleteMembers : false,
                 tripId:'',
+                myImages:[],
                 [event.target.name]: event.target.value
             });
         }
@@ -93,6 +86,7 @@ class Home extends Component {
         let that = this;
         let tripMembers = 0;
         let flag = 0;
+
         let updateImageState = function(){
             that.setState({
                 myImages: imageArray,
@@ -215,7 +209,6 @@ class Home extends Component {
             billRef.orderByChild('id').equalTo(this.state.tripId).once('child_added',billSnap => {
                 billRef.child(billSnap.key).remove();
                 that.setState({
-                    newTrip:'',
                     memberCount:'',
                     trip:'',
                     members:[],
@@ -281,14 +274,14 @@ class Home extends Component {
                                                 <button className="common-btn add-del-btn" onClick={this.deleteMembersFunction.bind(this)}>Delete members</button>
                                             </div> :
                                             <div>
-                                                <input className="trip"
+                                               {/* <input className="trip"
                                                        type="text"
                                                        placeholder="Enter number of members"
                                                        name="memberCount"
                                                        onChange={(e) => this.onChangeHandler(e,"memberCount")}
-                                                       value={this.state.memberCount}/>
+                                                       value={this.state.memberCount}/>*/}
                                                 < TripMembers
-                                                    memberCount={this.state.memberCount}
+
                                                     trip={this.state.trip}
                                                     tripId = {this.state.tripId}
                                                     user={this.props.user}
@@ -313,7 +306,7 @@ class Home extends Component {
                                                     {
                                                         this.state.showInput ?
                                                             <TripMembers
-                                                                memberCount={this.state.localMembers}
+
                                                                 trip={this.state.trip}
                                                                 tripId = {this.state.tripId}
                                                                 user={this.props.user}

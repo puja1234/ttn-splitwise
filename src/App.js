@@ -41,21 +41,21 @@ class App extends Component {
         });
     }
 
-  render() {
-    return (
-        <div className="mainContainer">
-            {this.state.authStatusChecked ?
-                this.state.user ?
-                    <Home user={this.state.user.email}
-                          photo={this.state.photo}
-                    />
-                    :
-                    <Login/> :
-                <Loader/>
-            }
-        </div>
-    );
-  }
+    render() {
+        return (
+            <div className="mainContainer">
+                {this.state.authStatusChecked ?
+                    this.state.user ?
+                        <Home user={this.state.user.email}
+                              photo={this.state.photo}
+                        />
+                        :
+                        <Login/> :
+                    <Loader/>
+                }
+            </div>
+        );
+    }
 }
 
 export default App;

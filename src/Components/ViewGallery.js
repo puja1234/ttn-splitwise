@@ -13,13 +13,18 @@ class ViewGallery extends Component{
             template = (<div className="no-trip-selected"><img src={photoGallery} alt="Gallery Img"/></div>)
         }
         else{
-            template = (<div className='storage-div'>
-                <h3>Welcome to trip {this.props.trip}</h3>
-                <Storage trip={this.props.trip}
-                         tripId = {this.props.tripId}
-                         user={this.props.user}
-                         myImages={this.props.myImages}/>
-            </div>)
+            if(this.props.tripId){
+                template = (<div className='storage-div'>
+                    <h3>Welcome to trip {this.props.trip}</h3>
+                    <Storage trip={this.props.trip}
+                             tripId = {this.props.tripId}
+                             user={this.props.user}
+                             myImages={this.props.myImages}/>
+                </div>)
+            }else{
+                template = (<div className="no-trip-selected"><img src={photoGallery} alt="Gallery Img"/></div>)
+            }
+
         }
         return(
             <div>

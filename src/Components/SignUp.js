@@ -12,7 +12,6 @@ class SignUp extends Component{
     }
 
     register = () => {
-
         if(this.state.email === '' || this.state.password === '' || this.state.password2 === ''){
             alert("Fields cannot be empty");
         }else if(this.state.password !== this.state.password2){

@@ -8,25 +8,33 @@ class TripMembers extends Component{
         super();
         this.state={
             members:[],
-            myMemberList:''
+            myMemberList:'',
+            addmore:false
         }
+    }
+
+    addmoreTrue(){
+        this.setState({
+            addmore:true
+        })
     }
 
     addMember(name){
         const { members } = this.state;
-
-        console.log(members,name,members.indexOf(name));
         if(members.indexOf(name) == -1 ){
             members.push(name);
             this.setState({
                 members,
-            },()=>{
-                console.log(this.state.members, 'members------')
             })
         }else{
             alert("same email members are not allowed!!")
         }
+    }
 
+    addingMoreMembers(){
+        this.setState({
+            addmore:false
+        })
     }
 
     addToDb(){
@@ -37,7 +45,7 @@ class TripMembers extends Component{
         let localMembers;
         let that = this;
 
-        if(this.props.trip === '' || this.props.memberCount === '' || this.state.members.length === 0 ){
+        if(this.props.trip === '' || this.state.members.length === 0 ){
             alert('trip cannot be empty');
         }
         else{
@@ -72,7 +80,8 @@ class TripMembers extends Component{
                 });
                 this.props.clearState();
                 this.setState({
-                    members: []
+                    members: [],
+                    addmore:false
                 });
                 alert("Your Data has been saved :)");
             }
@@ -81,14 +90,21 @@ class TripMembers extends Component{
     }
 
     render(){
-        const inputBox = [];
-        for(let i=0; i<this.props.memberCount;i++){
-            inputBox.push(<MemberDetails addMember={this.addMember.bind(this)} members={this.state.members}/>)
-        }
 
+        let existingMembers = this.state.members.map((item)=>(
+            <input value={item}/>
+        ));
         return(
             <div>
-                {inputBox}
+                {existingMembers}
+                {
+                    this.state.addmore
+                    ?
+                        <button className="common-btn" onClick={this.addingMoreMembers.bind(this)}>Add more </button>
+                    :
+                        <MemberDetails addMember={this.addMember.bind(this)} members={this.state.members} addmoreTrue={this.addmoreTrue.bind(this)}/>
+                }
+
                 <button className="common-btn" onClick={this.addToDb.bind(this)}>Save</button>
             </div>
         )
