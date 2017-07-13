@@ -306,7 +306,6 @@ class Home extends Component {
                                                     {
                                                         this.state.showInput ?
                                                             <TripMembers
-
                                                                 trip={this.state.trip}
                                                                 tripId = {this.state.tripId}
                                                                 user={this.props.user}

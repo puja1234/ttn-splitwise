@@ -3,6 +3,7 @@ import * as firebase from 'firebase'
 import Login from './Components/Login'
 import Home from './Components/Home'
 import Loader from './Components/Loader'
+import './App.css'
 
 class App extends Component {
     constructor(){

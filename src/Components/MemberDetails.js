@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../App.css';
+import * as firebase from 'firebase'
 
 class MemberDetails extends Component{
     constructor(){
@@ -23,12 +23,33 @@ class MemberDetails extends Component{
         }
         else if(re.test(this.state.memberDetail)=== false){
             alert("Enter valid email-id!!!")
-        }else if(this.props.members.indexOf(this.state.memberDetail) >=0 ) {
-            alert("Member already exist");
+        }else if(this.props.hasoriginalMembers){
+            let localMembers;
+            let rootRef = firebase.database().ref('trip/'+this.props.tripId);
+            rootRef.once('value',snap => {
+                localMembers = snap.val().members;
+                if(localMembers.indexOf(this.state.memberDetail) >=0){
+                    alert("Member already exist ");
+                    this.setState({
+                        memberDetail:''
+                    })
+                }else {
+                    console.log("adding new member");
+                    this.props.addMember(this.state.memberDetail);
+                    this.setState({
+                        view: false
+                    });
+                    this.props.addmoreTrue();
+                }
+            });
+        }
+        else if(this.props.members.indexOf(this.state.memberDetail) >=0 ) {
+            alert("Member already exist ");
             this.setState({
                 memberDetail:''
             })
         }else {
+            console.log("adding new member");
             this.props.addMember(this.state.memberDetail);
             this.setState({
                 view: false

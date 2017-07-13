@@ -26,8 +26,6 @@ class TripMembers extends Component{
             this.setState({
                 members,
             })
-        }else{
-            alert("same email members are not allowed!!")
         }
     }
 
@@ -38,6 +36,7 @@ class TripMembers extends Component{
     }
 
     addToDb(){
+
         //since firebase does not support array so storing members as object structure
         let rootRef = firebase.database().ref('trip/'+this.props.tripId);
         let newTripRef = firebase.database().ref().child('trip');
@@ -52,7 +51,6 @@ class TripMembers extends Component{
             console.log("!!!!!!!trip members",this.state.members.length,this.state.members,this.props.memberCount)
             if(this.props.hasoriginalMembers){
                 rootRef.on('value',snap => {
-                    console.log("inside tripMembers component",snap.val());
                     localMembers = snap.val().members;
                     that.setState({
                         members : localMembers.concat(this.state.members)
@@ -86,7 +84,6 @@ class TripMembers extends Component{
                 alert("Your Data has been saved :)");
             }
         }
-
     }
 
     render(){
@@ -102,7 +99,7 @@ class TripMembers extends Component{
                     ?
                         <button className="common-btn" onClick={this.addingMoreMembers.bind(this)}>Add more </button>
                     :
-                        <MemberDetails addMember={this.addMember.bind(this)} members={this.state.members} addmoreTrue={this.addmoreTrue.bind(this)}/>
+                        <MemberDetails addMember={this.addMember.bind(this)} members={this.state.members} addmoreTrue={this.addmoreTrue.bind(this)} tripId={this.props.tripId} hasoriginalMembers={this.props.hasoriginalMembers} />
                 }
 
                 <button className="common-btn" onClick={this.addToDb.bind(this)}>Save</button>
